@@ -23,7 +23,7 @@ public class UserController {
     public JsonResult register(String uname,String pwd){
 
         userService.registerUser(uname,pwd);
-        return JsonResult.success();
+        return JsonResult.success("注册成功！");
     }
 
     @ResponseBody

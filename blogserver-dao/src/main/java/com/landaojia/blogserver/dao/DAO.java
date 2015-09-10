@@ -9,8 +9,8 @@ import java.util.List;
  * @author Gray <long1795@gmail.com>
  */
 public interface DAO<O extends BaseEO> {
-	static int PAGE_FIRST = 1;
-	static int PAGE_SIZE = 20;
+	int PAGE_FIRST = 1;
+	int PAGE_SIZE = 20;
 
 	Long insert(O o);
 
