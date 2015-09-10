@@ -50,7 +50,7 @@ public class CodeGenerator {
 			String tName = rs.getString(1);
 			String comment = rs.getString(2);
 			if (needGen(tName.toLowerCase())) {
-				desc(conn, tName, tablePrefix, comment).write(isUpdate, output);
+				desc(conn, tName, tablePrefix, comment).write( output);
 			}
 			rs.next();
 		}

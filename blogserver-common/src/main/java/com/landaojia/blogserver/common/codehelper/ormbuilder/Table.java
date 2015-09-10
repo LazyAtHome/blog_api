@@ -38,7 +38,7 @@ public class Table implements Writeable {
 		this.comment = comment;
 	}
 
-	public void write(boolean isUpdate, String out) {
+	public void write( String out) {
 		String path = out.endsWith(File.separator) ? out : out + File.separator;
 		path = path + pkg.replaceAll("\\.", File.separator);
 		path = path.endsWith(File.separator) ? path : path + File.separator;
@@ -50,9 +50,6 @@ public class Table implements Writeable {
 		VelocityContext vc = new VelocityContext();
 		vc.put("pkg", pkg);
 		vc.put("table", this);
-//		write(vc, "template/orm/AbsTemplateDao.java", path + "Abs" + className + "Dao.java");
-//		write(vc, "template/orm/AbsTemplateEO.java", path + "Abs" + className + ".java");
-//		write(vc, "template/orm/AbsTemplateMapper.xml", path + className + "AbsMapper.xml");
 
 		write(vc, "template/orm/TemplateDao.java", path + className + "Dao.java");
 		write(vc, "template/orm/TemplateEO.java", path + className + ".java");
