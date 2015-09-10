@@ -1,7 +1,7 @@
 package com.landaojia.blogserver.dao.user;
 
 
-import com.landaojia.blogserver.common.dao.BaseEO;
+import com.landaojia.blogserver.dao.BaseEO;
 
 /**
  * 

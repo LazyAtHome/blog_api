@@ -1,4 +1,4 @@
-package com.landaojia.blogserver.common.dao;
+package com.landaojia.blogserver.dao;
 
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSessionFactory;

@@ -4,6 +4,7 @@ import com.landaojia.blogserver.common.result.JsonResult;
 import com.landaojia.blogserver.service.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 
@@ -17,7 +18,7 @@ public class UserController {
     @Resource
     private UserService userService;
 
-
+    @ResponseBody
     @RequestMapping("/register")
     public JsonResult register(String uname,String pwd){
 
@@ -25,6 +26,7 @@ public class UserController {
         return JsonResult.success();
     }
 
+    @ResponseBody
     @RequestMapping("/test")
     public JsonResult test(String uname,String pwd){
         return JsonResult.success("成功！");

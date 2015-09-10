@@ -1,4 +1,4 @@
-package com.landaojia.blogserver.common.dao;
+package com.landaojia.blogserver.dao;
 
 /**
  * @author codingwoo <long1795@gmail.com>

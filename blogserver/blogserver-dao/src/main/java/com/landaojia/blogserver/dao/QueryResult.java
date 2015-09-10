@@ -1,4 +1,4 @@
-package com.landaojia.blogserver.common.dao;
+package com.landaojia.blogserver.dao;
 
 
 import com.landaojia.blogserver.common.BaseObject;
