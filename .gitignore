@@ -1,3 +1,19 @@
+# Intellij
 *.iml
 */target/*
 .idea/*
+
+# Eclipse
+.classpath
+.project
+**/.classpath
+**/.project
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
+blogserver-service/.settings
+blogserver-common/.settings
