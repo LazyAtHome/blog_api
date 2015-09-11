@@ -45,6 +45,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            
         </plugins>
     </build>
 
@@ -91,6 +92,7 @@
         <version.groovy>2.4.3</version.groovy>
         <version.persistence>1.0</version.persistence>
         <version.hessian>4.0.38</version.hessian>
+        <version.jetty>9.2.1.v20140609</version.jetty>
     </properties>
 
     <dependencyManagement>
@@ -272,6 +274,7 @@
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
                 <version>${version.servlet}</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>

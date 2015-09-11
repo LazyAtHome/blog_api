@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- For assistance related to logback-translator or configuration -->
+<!-- files in general, please contact the logback user mailing list -->
+<!-- at http://www.qos.ch/mailman/listinfo/logback-user -->
+<!-- -->
+<!-- For professional support please see -->
+<!-- http://www.qos.ch/shop/products/professionalSupport -->
+<!-- -->
+<configuration>
+	<!-- <timestamp key="DATE_PATTERN" datePattern="yyyy-MM-dd HH:mm:ss"></timestamp>
+	<timestamp key="DATETIME_PATTERN" datePattern="yyyy-MM-dd-HH"></timestamp> -->
+	
+	<turboFilter class="ch.qos.logback.classic.turbo.DuplicateMessageFilter" />
+	<!-- dump status message on the console as they arrive -->
+	<statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener" />
+	
+	<appender name="CLIENT"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- <File>${MKVIII_LOG}/client.log</File> -->
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss}, %t, %-5p, %c - %m%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${MKVIII_LOG}/client.%d{yyyy-MM-dd-HH}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 10MB -->
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<!-- keep 10 files worth of history -->
+			<maxHistory>50</maxHistory>
+		</rollingPolicy>
+	</appender>
+	<appender name="PERF"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- <File>${MKVIII_LOG}/perf.log</File> -->
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss}, %t, %-5p, %c - %m%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${MKVIII_LOG}/perf.%d{yyyy-MM-dd-HH}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 10MB -->
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<!-- keep 10 files worth of history -->
+			<maxHistory>50</maxHistory>
+		</rollingPolicy>
+	</appender>
+	<appender name="A1"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- <File>${MKVIII_LOG}/MKVIII.log</File> -->
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss}, %t, %-5p, %c - %m%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${MKVIII_LOG}/MKVIII.%d{yyyy-MM-dd-HH}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 10MB -->
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<!-- keep 10 files worth of history -->
+			<maxHistory>50</maxHistory>
+		</rollingPolicy>
+	</appender>
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<Target>System.out</Target>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n</pattern>
+		</encoder>
+	</appender>
+
+	
+	<logger name="org.hibernate" level="ERROR"></logger>
+	<logger name="org.springframework" level="ERROR"></logger>
+
+	<logger name="org.quartz" level="ERROR" />
+	<logger name="org.springframework.transaction.interceptor" level="TRACE" />
+	
+	<root level="info">
+		<appender-ref ref="A1" />
+		<appender-ref ref="stdout" />
+		<!-- <appender-ref ref="EMAIL" /> -->
+	</root>
+</configuration>
