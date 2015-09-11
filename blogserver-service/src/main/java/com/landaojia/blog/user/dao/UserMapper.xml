@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landaojia.blog.user.dao.UserDao">
+	<resultMap type="com.landaojia.blog.user.dao.User" id="result"/>
+    <sql id="select_all_cols">
+    	b_user.ID,
+		b_user.username as username,
+		b_user.email as email,
+		b_user.crypted_pass as cryptedPass,
+		b_user.role as role,
+		b_user.CREATE_DATE as createDate,
+		b_user.UPDATE_DATE as updateDate,
+		b_user.CREATE_BY as createBy,
+		b_user.UPDATE_BY as updateBy,
+		b_user.VERSION 
+    </sql>
+    <sql id="insert_all_cols">
+		b_user.username,
+		b_user.email,
+		b_user.crypted_pass,
+		b_user.role,
+		b_user.DELETED_FLAG,
+		b_user.CREATE_DATE,
+		b_user.UPDATE_DATE,
+		b_user.CREATE_BY,
+		b_user.UPDATE_BY,
+		b_user.VERSION 
+    </sql>
+    <sql id="where_all">
+		WHERE DELETED_FLAG=0
+		<if test="cond.id != null">
+			AND b_user.id = #{cond.id}
+		</if>
+		<if test="cond.username != null">
+			AND b_user.username = #{cond.username}
+		</if>
+		<if test="cond.email != null">
+			AND b_user.email = #{cond.email}
+		</if>
+		<if test="cond.cryptedPass != null">
+			AND b_user.crypted_pass = #{cond.cryptedPass}
+		</if>
+		<if test="cond.role != null">
+			AND b_user.role = #{cond.role}
+		</if>
+		<if test="cond.version != null">
+			AND b_user.version = #{cond.version}
+		</if>
+		<if test="cond.ids != null">
+			and b_user.id in
+			<foreach item="item" index="index" collection="cond.ids" open="(" separator="," close=")">  
+				#{item}  
+ 			</foreach> 
+		</if>
+		<if test="cond.createDateB != null">
+		<![CDATA[
+			AND b_user.CREATE_DATE >= #{cond.createDateB}
+		]]>
+		</if>
+		<if test="cond.createDateE != null">
+		<![CDATA[
+			AND b_user.CREATE_DATE <= #{cond.createDateE}
+		]]>
+		</if>
+		<if test="cond.updateDateB != null">
+		<![CDATA[
+			AND b_user.UPDATE_DATE >= #{cond.updateDateB}
+		]]>
+		</if>
+		<if test="cond.updateDateE != null">
+		<![CDATA[
+			AND b_user.UPDATE_DATE <= #{cond.updateDateE}
+		]]>
+		</if>
+    </sql>
+	<select id="select" resultMap="result"> 
+		select <include refid="select_all_cols"/>
+		FROM b_user 
+		WHERE DELETED_FLAG=0 and b_user.ID=#{id}
+		<if test="lock">
+		FOR UPDATE
+		</if>
+	</select>
+	<select id="query" resultMap="result">
+		select <include refid="select_all_cols"/>
+		FROM b_user 
+		<include refid="where_all"/>
+		<if test="start != null">
+		order by b_user.CREATE_DATE desc
+		limit #{start},#{size}
+		</if>
+	</select>
+	<select id="count" resultType="java.lang.Long">
+		select count(0)
+		FROM b_user 
+		<include refid="where_all"/>
+	</select>
+	<select id="sum" resultType="java.math.BigDecimal">
+		select sum(${col})
+		FROM b_user 
+		<include refid="where_all"/>
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id" >
+		INSERT INTO b_user(<include refid="insert_all_cols"/>)
+			VALUES
+				(
+					#{username},
+					#{email},
+					#{cryptedPass},
+					#{role},
+					0,current_timestamp(),current_timestamp(),#{createBy},#{updateBy},1
+				)
+	</insert>
+	<insert id="batchInsert">
+		INSERT INTO b_user(<include refid="insert_all_cols"/>)
+			VALUES
+			<foreach item="item" index="index" collection="list" open="" separator="," close="">
+				(
+					#{item.username},
+					#{item.email},
+					#{item.cryptedPass},
+					#{item.role},
+					0,current_timestamp(),current_timestamp(),#{createBy},#{updateBy},1
+				)
+			</foreach>
+	</insert>
+	<insert id="insertWithId">
+		INSERT INTO b_user(ID,<include refid="insert_all_cols"/>)
+			VALUES
+				(#{id},
+					#{username},
+					#{email},
+					#{cryptedPass},
+					#{role},
+					0,current_timestamp(),current_timestamp(),#{createBy},#{updateBy},1
+				)
+	</insert>
+	<insert id="batchInsertWithId">
+		INSERT INTO b_user(ID,<include refid="insert_all_cols"/>)
+			VALUES
+			<foreach item="item" index="index" collection="list" open="" separator="," close="">
+				(#{item.id},
+					#{item.username},
+					#{item.email},
+					#{item.cryptedPass},
+					#{item.role},
+					0,current_timestamp(),current_timestamp(),#{createBy},#{updateBy},1
+				)
+			</foreach>
+	</insert>
+	<update id="update">
+		update b_user
+		<set>
+			username = #{username},
+			email = #{email},
+			crypted_pass = #{cryptedPass},
+			role = #{role},
+			id = #{id},
+			version = version + 1,
+			UPDATE_DATE = current_timestamp(),
+			UPDATE_BY=#{updateBy}
+		</set>
+		where b_user.id = #{id} and b_user.version = #{version}
+	</update>
+	<delete id="delete">
+		update b_user set DELETED_FLAG=1
+		<include refid="where_all"/>
+	</delete>
+	<delete id="deleteById">
+		update b_user set DELETED_FLAG=1 where b_user.id = #{id}
+	</delete>
+</mapper>
