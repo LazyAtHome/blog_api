@@ -17,3 +17,5 @@ log/
 target/
 blogserver-service/.settings
 blogserver-common/.settings
+logserver-common/.classpath
+logserver-service/.classpath

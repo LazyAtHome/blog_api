@@ -3,6 +3,8 @@ package com.landaojia.blog.common.dao;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * base entity for every business entity;
  * 
@@ -20,11 +22,17 @@ public abstract class BaseEntity implements Entity<Long>, Serializable {
     private Long    id;
     private Integer version;
     private Integer deletedFlag;
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     private Date    createdDate;
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     transient private Date    createdDateB;
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     transient private Date    createdDateE;
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     private Date    updatedDate;
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     transient private Date    updatedDateB;
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     transient private Date    updatedDateE;
     private String    createdBy;
     private String    updatedBy;
