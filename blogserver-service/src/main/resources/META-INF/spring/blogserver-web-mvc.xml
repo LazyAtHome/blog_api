@@ -19,7 +19,9 @@
     <property name="prefix" value="/WEB-INF/jsp/" />
     <property name="suffix" value=".jsp" />
 </bean>
-<!--<bean id="exceptionResolver" class="com.landaojia.server.base.exception.ControllerExceptionResolver" />-->
+<bean id="exceptionResolver" class="com.landaojia.mvc.HttpHandlerExceptionResolver" />
+<mvc:resources mapping="/static/**" location="/etc/"/>
+
 
 <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 	<property name="messageConverters">
@@ -33,7 +35,6 @@
 		</list>
 	</property>
 </bean>
-
 
 <bean id="annotationMapper" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
     <property name="interceptors">

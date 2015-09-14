@@ -93,6 +93,7 @@
         <version.persistence>1.0</version.persistence>
         <version.hessian>4.0.38</version.hessian>
         <version.jetty>9.2.1.v20140609</version.jetty>
+        <version.commons-lang3>3.4</version.commons-lang3>
     </properties>
 
     <dependencyManagement>
@@ -340,11 +341,6 @@
                 <groupId>org.apache.velocity</groupId>
                 <artifactId>velocity</artifactId>
                 <version>${version.velocity}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>3.4</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>

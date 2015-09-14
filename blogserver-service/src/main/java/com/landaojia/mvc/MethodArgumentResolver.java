@@ -22,15 +22,13 @@ import com.landaojia.blog.user.entity.User;
  * 2015年9月9日
  */
 public class MethodArgumentResolver implements HandlerMethodArgumentResolver {
-    
-    public static final String SESSION_LOGIN = "session-login";
 
 	@Override
 	public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 		WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getSession().getServletContext());
 		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute(SESSION_LOGIN);
+		User user = (User) session.getAttribute(Current.SESSION_LOGIN);
 		return new Current(context.getBean(CommonDao.class), context.getBean(UserDao.class), user);
 	}
 
