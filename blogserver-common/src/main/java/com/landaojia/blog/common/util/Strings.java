@@ -1,4 +1,4 @@
-package com.landaojia.blog.blog.common.util;
+package com.landaojia.blog.common.util;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;

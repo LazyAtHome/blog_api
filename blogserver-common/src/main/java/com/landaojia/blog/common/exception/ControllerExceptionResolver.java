@@ -1,10 +1,10 @@
-package com.landaojia.blog.blog.common.exception;
+package com.landaojia.blog.common.exception;
 
 
-import com.landaojia.blog.blog.common.log.LogAble;
-import com.landaojia.blog.blog.common.result.JsonResult;
-import com.landaojia.blog.blog.common.util.DateUtil;
-import com.landaojia.blog.blog.common.util.HttpUtil;
+import com.landaojia.blog.common.log.LogAble;
+import com.landaojia.blog.common.result.JsonResult;
+import com.landaojia.blog.common.util.DateUtil;
+import com.landaojia.blog.common.util.HttpUtil;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 

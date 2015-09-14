@@ -1,4 +1,4 @@
-package com.landaojia.blog.blog.common.util;
+package com.landaojia.blog.common.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

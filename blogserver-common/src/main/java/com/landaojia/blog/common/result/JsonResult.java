@@ -1,7 +1,7 @@
-package com.landaojia.blog.blog.common.result;
+package com.landaojia.blog.common.result;
 
 import com.alibaba.fastjson.JSON;
-import com.landaojia.blog.blog.common.Result;
+import com.landaojia.blog.common.Result;
 import org.springframework.beans.BeanUtils;
 
 import java.util.Date;

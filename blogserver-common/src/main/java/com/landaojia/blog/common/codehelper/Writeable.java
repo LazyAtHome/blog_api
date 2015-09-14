@@ -1,6 +1,6 @@
-package com.landaojia.blog.blog.common.codehelper;
+package com.landaojia.blog.common.codehelper;
 
-import com.landaojia.blog.blog.common.log.LogAble;
+import com.landaojia.blog.common.log.LogAble;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;

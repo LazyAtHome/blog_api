@@ -1,4 +1,4 @@
-package com.landaojia.blog.blog.common.exception;
+package com.landaojia.blog.common.exception;
 
 /**
  * 通用异常

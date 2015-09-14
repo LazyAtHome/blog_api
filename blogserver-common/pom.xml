@@ -134,6 +134,11 @@
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.7.0</version>
 		</dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+        </dependency>
+
     </dependencies>
 
 

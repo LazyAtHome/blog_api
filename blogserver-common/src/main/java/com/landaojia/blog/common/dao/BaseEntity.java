@@ -1,4 +1,4 @@
-package com.landaojia.blog.blog.common.dao;
+package com.landaojia.blog.common.dao;
 
 import java.io.Serializable;
 import java.util.Date;

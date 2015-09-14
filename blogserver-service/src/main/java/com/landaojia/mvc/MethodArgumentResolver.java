@@ -11,7 +11,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import com.landaojia.blog.blog.common.dao.CommonDao;
+import com.landaojia.blog.common.dao.CommonDao;
 import com.landaojia.blog.user.dao.UserDao;
 import com.landaojia.blog.user.entity.User;
 
@@ -28,9 +28,9 @@ public class MethodArgumentResolver implements HandlerMethodArgumentResolver {
 	@Override
 	public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
-		WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getServletContext());
-	      HttpSession session = request.getSession();
-	     User user = (User) session.getAttribute(SESSION_LOGIN);
+		WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getSession().getServletContext());
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute(SESSION_LOGIN);
 		return new Current(context.getBean(CommonDao.class), context.getBean(UserDao.class), user);
 	}
 

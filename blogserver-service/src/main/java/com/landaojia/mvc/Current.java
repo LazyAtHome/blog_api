@@ -1,6 +1,6 @@
 package com.landaojia.mvc;
 
-import com.landaojia.blog.blog.common.dao.CommonDao;
+import com.landaojia.blog.common.dao.CommonDao;
 import com.landaojia.blog.user.dao.UserDao;
 import com.landaojia.blog.user.entity.User;
 
@@ -18,11 +18,7 @@ public class Current {
     
     User user;
 
-    /**
-     * Inject the spring beans we need by constructor of this object.
-     * @param commonRepository
-     * @param userRepository
-     */
+
     public Current(CommonDao commonDao, UserDao userDao, User user) {
         super();
         this.commonDao = commonDao;

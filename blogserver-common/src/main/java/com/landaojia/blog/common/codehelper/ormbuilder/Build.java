@@ -1,4 +1,4 @@
-package com.landaojia.blog.blog.common.codehelper.ormbuilder;
+package com.landaojia.blog.common.codehelper.ormbuilder;
 
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;

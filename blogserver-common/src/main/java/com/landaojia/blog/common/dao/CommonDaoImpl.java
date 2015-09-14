@@ -1,4 +1,4 @@
-package com.landaojia.blog.blog.common.dao;
+package com.landaojia.blog.common.dao;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -7,11 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.landaojia.blog.common.exception.CommonException;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.landaojia.blog.blog.common.exception.CommonException;
 
 public class CommonDaoImpl extends SqlSessionDaoSupport implements CommonDao {
 

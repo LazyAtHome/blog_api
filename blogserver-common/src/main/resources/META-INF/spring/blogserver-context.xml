@@ -10,7 +10,7 @@
    	<!-- <context:component-scan base-package="com.landaojia.**"/> -->
    	
    	<!-- common utility for basic operates of object from database, such as permanent,getting by primary key etc... -->
-	<bean id="commonDao" class="com.landaojia.blog.blog.common.dao.CommonDaoImpl">
+	<bean id="commonDao" class="com.landaojia.blog.common.dao.CommonDaoImpl">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
 	</bean>	
 </beans>

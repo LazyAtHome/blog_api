@@ -1,4 +1,4 @@
-package com.landaojia.blog.blog.common;
+package com.landaojia.blog.common;
 
 import java.util.HashMap;
 import java.util.Map;

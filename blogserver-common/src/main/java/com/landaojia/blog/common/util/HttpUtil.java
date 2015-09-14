@@ -1,4 +1,4 @@
-package com.landaojia.blog.blog.common.util;
+package com.landaojia.blog.common.util;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Set;

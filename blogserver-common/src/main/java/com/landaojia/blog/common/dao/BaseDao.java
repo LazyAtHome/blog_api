@@ -1,4 +1,4 @@
-package com.landaojia.blog.blog.common.dao;
+package com.landaojia.blog.common.dao;
 
 import javax.annotation.Resource;
 

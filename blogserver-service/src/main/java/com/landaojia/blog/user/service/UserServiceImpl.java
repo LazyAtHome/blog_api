@@ -6,9 +6,9 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.landaojia.blog.blog.common.dao.CommonDao;
-import com.landaojia.blog.blog.common.exception.CommonException;
-import com.landaojia.blog.blog.common.exception.CommonExceptionCode;
+import com.landaojia.blog.common.dao.CommonDao;
+import com.landaojia.blog.common.exception.CommonException;
+import com.landaojia.blog.common.exception.CommonExceptionCode;
 import com.landaojia.blog.user.dao.UserDao;
 import com.landaojia.blog.user.entity.User;
 

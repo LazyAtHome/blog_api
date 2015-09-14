@@ -1,6 +1,6 @@
-package com.landaojia.blog.blog.common.codehelper.ormbuilder;
+package com.landaojia.blog.common.codehelper.ormbuilder;
 
-import com.landaojia.blog.blog.common.log.LogAble;
+import com.landaojia.blog.common.log.LogAble;
 import org.apache.commons.dbcp.BasicDataSource;
 import java.sql.*;
 import java.util.HashMap;

@@ -1,7 +1,7 @@
-package com.landaojia.blog.blog.common.codehelper.ormbuilder;
+package com.landaojia.blog.common.codehelper.ormbuilder;
 
 
-import com.landaojia.blog.blog.common.util.Strings;
+import com.landaojia.blog.common.util.Strings;
 
 import java.util.HashMap;
 import java.util.Map;

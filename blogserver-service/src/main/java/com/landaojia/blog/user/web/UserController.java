@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.landaojia.blog.blog.common.result.JsonResult;
+import com.landaojia.blog.common.result.JsonResult;
 
 /**
  * Created by JUN on 15/9/11.
