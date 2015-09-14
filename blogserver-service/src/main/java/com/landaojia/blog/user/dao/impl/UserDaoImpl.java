@@ -1,9 +1,11 @@
 package com.landaojia.blog.user.dao.impl;
 
-import org.mybatis.spring.support.SqlSessionDaoSupport;
+import org.springframework.stereotype.Repository;
 
+import com.landaojia.blog.blog.common.dao.BaseDao;
 import com.landaojia.blog.user.dao.UserDao;
 
-public class UserDaoImpl extends SqlSessionDaoSupport implements UserDao {
-
+@Repository
+public class UserDaoImpl extends BaseDao implements UserDao {
+    
 }

@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.landaojia.blog.blog.common.exception.CommonException;
 
-@Repository
 public class CommonDaoImpl extends SqlSessionDaoSupport implements CommonDao {
 
     public static final String FAIL_OPERATION = "操作失败";
@@ -126,7 +125,6 @@ public class CommonDaoImpl extends SqlSessionDaoSupport implements CommonDao {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public <T extends BaseEntity> List<T> search(T entity) {
         if (entity == null) return new ArrayList<T>();
         Map<String, Object> paramMap = new HashMap<String, Object>();
