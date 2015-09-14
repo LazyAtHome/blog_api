@@ -1,6 +1,7 @@
 package com.landaojia.blog.common.result;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.landaojia.blog.common.Result;
 import org.springframework.beans.BeanUtils;
 
@@ -36,6 +37,7 @@ public class JsonResult {
 	 */
 	private Object data;
 
+	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
 	private Date now;
 
 	public JsonResult(){
