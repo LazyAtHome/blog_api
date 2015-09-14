@@ -8,10 +8,10 @@
                 b_post.content as content,
                 b_post.user_id as userId,
                 b_post.view_count as viewCount,
-                b_post.CREATE_DATE as createDate,
-        b_post.UPDATE_DATE as updateDate,
-        b_post.CREATE_BY as createBy,
-        b_post.UPDATE_BY as updateBy,
+                b_post.CREATED_DATE as createdDate,
+        b_post.UPDATED_DATE as updatedDate,
+        b_post.CREATED_BY as createdBy,
+        b_post.UPDATED_BY as updatedBy,
         b_post.VERSION
     </sql>
     <sql id="insert_all_cols">
@@ -20,10 +20,10 @@
                 b_post.user_id,
                 b_post.view_count,
                 b_post.DELETED_FLAG,
-        b_post.CREATE_DATE,
-        b_post.UPDATE_DATE,
-        b_post.CREATE_BY,
-        b_post.UPDATE_BY,
+        b_post.CREATED_DATE,
+        b_post.UPDATED_DATE,
+        b_post.CREATED_BY,
+        b_post.UPDATED_BY,
         b_post.VERSION
     </sql>
     <sql id="where_all">
@@ -52,24 +52,24 @@
                 #{item}
             </foreach>
         </if>
-        <if test="cond.createDateB != null">
+        <if test="cond.createdDateB != null">
             <![CDATA[
-			AND b_post.CREATE_DATE >= #{cond.createDateB}
+			AND b_post.CREATED_DATE >= #{cond.createdDateB}
 		]]>
         </if>
-        <if test="cond.createDateE != null">
+        <if test="cond.createdDateE != null">
             <![CDATA[
-			AND b_post.CREATE_DATE <= #{cond.createDateE}
+			AND b_post.CREATED_DATE <= #{cond.createdDateE}
 		]]>
         </if>
-        <if test="cond.updateDateB != null">
+        <if test="cond.updatedDateB != null">
             <![CDATA[
-			AND b_post.UPDATE_DATE >= #{cond.updateDateB}
+			AND b_post.UPDATED_DATE >= #{cond.updatedDateB}
 		]]>
         </if>
-        <if test="cond.updateDateE != null">
+        <if test="cond.updatedDateE != null">
             <![CDATA[
-			AND b_post.UPDATE_DATE <= #{cond.updateDateE}
+			AND b_post.UPDATED_DATE <= #{cond.updatedDateE}
 		]]>
         </if>
     </sql>
@@ -86,7 +86,7 @@
         FROM b_post
         <include refid="where_all"/>
         <if test="start != null">
-            order by b_post.CREATE_DATE desc
+            order by b_post.CREATED_DATE desc
             limit #{start},#{size}
         </if>
     </select>
@@ -108,7 +108,7 @@
                 #{content},
                 #{userId},
                 #{viewCount},
-                0,current_timestamp(),current_timestamp(),#{createBy},#{updateBy},1
+                0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
         )
     </insert>
     <insert id="batchInsert">
@@ -120,7 +120,7 @@
                         #{item.content},
                         #{item.userId},
                         #{item.viewCount},
-                        0,current_timestamp(),current_timestamp(),#{createBy},#{updateBy},1
+                        0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
             )
         </foreach>
     </insert>
@@ -132,7 +132,7 @@
                 #{content},
                 #{userId},
                 #{viewCount},
-                0,current_timestamp(),current_timestamp(),#{createBy},#{updateBy},1
+                0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
         )
     </insert>
     <insert id="batchInsertWithId">
@@ -144,7 +144,7 @@
                         #{item.content},
                         #{item.userId},
                         #{item.viewCount},
-                        0,current_timestamp(),current_timestamp(),#{createBy},#{updateBy},1
+                        0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
             )
         </foreach>
     </insert>
@@ -157,8 +157,8 @@
                         view_count = #{viewCount},
                         id = #{id},
             version = version + 1,
-            UPDATE_DATE = current_timestamp(),
-            UPDATE_BY=#{updateBy}
+            UPDATED_DATE = current_timestamp(),
+            UPDATED_BY=#{updatedBy}
         </set>
         where b_post.id = #{id} and b_post.version = #{version}
     </update>

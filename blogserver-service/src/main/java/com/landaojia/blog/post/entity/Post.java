@@ -1,6 +1,5 @@
 package com.landaojia.blog.post.entity;
 
-
 import com.landaojia.blog.common.dao.BaseEntity;
 
 /**
