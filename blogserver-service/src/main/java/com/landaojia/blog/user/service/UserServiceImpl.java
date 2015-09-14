@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
     public void registerUser(String uname, String pwd) {
         User user = new User();
-        user.setUsername(uname);
+        user.setUserName(uname);
         List<User> users = commonDao.search(user);
         if(users.size() != 1){
             throw new CommonException(CommonExceptionCode.USER_IS_EXISTS);
