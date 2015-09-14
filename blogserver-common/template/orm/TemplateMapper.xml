@@ -9,10 +9,10 @@
         #foreach( ${col} in ${table.cols} )
         ${table.fullName}.${col.colName} as ${col.fieldName},
         #end
-        ${table.fullName}.CREATE_DATE as createDate,
-        ${table.fullName}.UPDATE_DATE as updateDate,
-        ${table.fullName}.CREATE_BY as createBy,
-        ${table.fullName}.UPDATE_BY as updateBy,
+        ${table.fullName}.CREATED_DATE as createdDate,
+        ${table.fullName}.UPDATED_DATE as updatedDate,
+        ${table.fullName}.CREATED_BY as createdBy,
+        ${table.fullName}.UPDATED_BY as updatedBy,
         ${table.fullName}.VERSION
     </sql>
     <sql id="insert_all_cols">
@@ -20,10 +20,10 @@
         ${table.fullName}.${col.colName},
         #end
         ${table.fullName}.DELETED_FLAG,
-        ${table.fullName}.CREATE_DATE,
-        ${table.fullName}.UPDATE_DATE,
-        ${table.fullName}.CREATE_BY,
-        ${table.fullName}.UPDATE_BY,
+        ${table.fullName}.CREATED_DATE,
+        ${table.fullName}.UPDATED_DATE,
+        ${table.fullName}.CREATED_BY,
+        ${table.fullName}.UPDATED_BY,
         ${table.fullName}.VERSION
     </sql>
     <sql id="where_all">
@@ -53,24 +53,24 @@
                 #{item}
             </foreach>
         </if>
-        <if test="cond.createDateB != null">
+        <if test="cond.createdDateB != null">
             <![CDATA[
-			AND ${table.fullName}.CREATE_DATE >= #{cond.createDateB}
+			AND ${table.fullName}.CREATED_DATE >= #{cond.createdDateB}
 		]]>
         </if>
-        <if test="cond.createDateE != null">
+        <if test="cond.createdDateE != null">
             <![CDATA[
-			AND ${table.fullName}.CREATE_DATE <= #{cond.createDateE}
+			AND ${table.fullName}.CREATED_DATE <= #{cond.createdDateE}
 		]]>
         </if>
-        <if test="cond.updateDateB != null">
+        <if test="cond.updatedDateB != null">
             <![CDATA[
-			AND ${table.fullName}.UPDATE_DATE >= #{cond.updateDateB}
+			AND ${table.fullName}.UPDATED_DATE >= #{cond.updatedDateB}
 		]]>
         </if>
-        <if test="cond.updateDateE != null">
+        <if test="cond.updatedDateE != null">
             <![CDATA[
-			AND ${table.fullName}.UPDATE_DATE <= #{cond.updateDateE}
+			AND ${table.fullName}.UPDATED_DATE <= #{cond.updatedDateE}
 		]]>
         </if>
     </sql>
@@ -87,7 +87,7 @@
         FROM ${table.fullName}
         <include refid="where_all"/>
         <if test="start != null">
-            order by ${table.fullName}.CREATE_DATE desc
+            order by ${table.fullName}.CREATED_DATE desc
             limit #{start},#{size}
         </if>
     </select>
@@ -108,7 +108,7 @@
         #foreach( ${col} in ${table.cols} )
         #{${col.fieldName}},
         #end
-        0,current_timestamp(),current_timestamp(),#{createBy},#{updateBy},1
+        0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
         )
     </insert>
     <insert id="batchInsert">
@@ -119,7 +119,7 @@
             #foreach( ${col} in ${table.cols} )
             #{item.${col.fieldName}},
             #end
-            0,current_timestamp(),current_timestamp(),#{createBy},#{updateBy},1
+            0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
             )
         </foreach>
     </insert>
@@ -130,7 +130,7 @@
         #foreach( ${col} in ${table.cols} )
         #{${col.fieldName}},
         #end
-        0,current_timestamp(),current_timestamp(),#{createBy},#{updateBy},1
+        0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
         )
     </insert>
     <insert id="batchInsertWithId">
@@ -141,7 +141,7 @@
             #foreach( ${col} in ${table.cols} )
             #{item.${col.fieldName}},
             #end
-            0,current_timestamp(),current_timestamp(),#{createBy},#{updateBy},1
+            0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
             )
         </foreach>
     </insert>
@@ -153,8 +153,8 @@
             #end
             id = #{id},
             version = version + 1,
-            UPDATE_DATE = current_timestamp(),
-            UPDATE_BY=#{updateBy}
+            UPDATED_DATE = current_timestamp(),
+            UPDATED_BY=#{updatedBy}
         </set>
         where ${table.fullName}.id = #{id} and ${table.fullName}.version = #{version}
     </update>
