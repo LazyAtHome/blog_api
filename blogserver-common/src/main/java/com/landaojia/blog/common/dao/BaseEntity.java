@@ -21,7 +21,11 @@ public abstract class BaseEntity implements Entity<Long>, Serializable {
     private Integer version;
     private Integer deletedFlag;
     private Date    createdDate;
+    transient private Date    createdDateB;
+    transient private Date    createdDateE;
     private Date    updatedDate;
+    transient private Date    updatedDateB;
+    transient private Date    updatedDateE;
     private Long    createdBy;
     private Long    updatedBy;
 
@@ -78,6 +82,46 @@ public abstract class BaseEntity implements Entity<Long>, Serializable {
 
     public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    
+    public Date getCreatedDateB() {
+        return createdDateB;
+    }
+
+    
+    public void setCreatedDateB(Date createdDateB) {
+        this.createdDateB = createdDateB;
+    }
+
+    
+    public Date getCreatedDateE() {
+        return createdDateE;
+    }
+
+    
+    public void setCreatedDateE(Date createdDateE) {
+        this.createdDateE = createdDateE;
+    }
+
+    
+    public Date getUpdatedDateB() {
+        return updatedDateB;
+    }
+
+    
+    public void setUpdatedDateB(Date updatedDateB) {
+        this.updatedDateB = updatedDateB;
+    }
+
+    
+    public Date getUpdatedDateE() {
+        return updatedDateE;
+    }
+
+    
+    public void setUpdatedDateE(Date updatedDateE) {
+        this.updatedDateE = updatedDateE;
     }
 
     public Long getCreatedBy() {

@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
             throw new CommonException(CommonExceptionCode.USER_IS_EXISTS);
         } else {
             User u = users.get(0);
-            u.setCryptedPass(pwd);
+            u.setCryptedPassword(pwd);
             commonDao.insert(u);
         }
     }
