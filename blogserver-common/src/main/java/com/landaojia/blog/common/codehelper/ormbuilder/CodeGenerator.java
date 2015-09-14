@@ -18,10 +18,10 @@ public class CodeGenerator implements LogAble {
 	static {
 		ignoreCols.add("id");
 		ignoreCols.add("deleted_flag");
-		ignoreCols.add("create_date");
-		ignoreCols.add("update_date");
-		ignoreCols.add("create_by");
-		ignoreCols.add("update_by");
+		ignoreCols.add("created_date");
+		ignoreCols.add("updated_date");
+		ignoreCols.add("created_by");
+		ignoreCols.add("updated_by");
 		ignoreCols.add("version");
 	}
 

@@ -51,7 +51,7 @@ public class Table implements Writeable {
 		vc.put("pkg", pkg);
 		vc.put("table", this);
 
-		write(vc, "template/orm/TemplateDao.java", path + className + "Dao.java");
+//		write(vc, "template/orm/TemplateDao.java", path + className + "Dao.java");
 		write(vc, "template/orm/TemplateEO.java", path + className + ".java");
 		write(vc, "template/orm/TemplateMapper.xml", path + className + "Mapper.xml");
 

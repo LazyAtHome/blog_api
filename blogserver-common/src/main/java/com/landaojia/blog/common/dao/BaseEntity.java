@@ -26,8 +26,8 @@ public abstract class BaseEntity implements Entity<Long>, Serializable {
     private Date    updatedDate;
     transient private Date    updatedDateB;
     transient private Date    updatedDateE;
-    private Long    createdBy;
-    private Long    updatedBy;
+    private String    createdBy;
+    private String    updatedBy;
 
     @SuppressWarnings("unchecked")
     public boolean equals(Object obj) {
@@ -124,19 +124,19 @@ public abstract class BaseEntity implements Entity<Long>, Serializable {
         this.updatedDateE = updatedDateE;
     }
 
-    public Long getCreatedBy() {
+    public String getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(Long createdBy) {
+    public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
-    public Long getUpdatedBy() {
+    public String getUpdatedBy() {
         return updatedBy;
     }
 
-    public void setUpdatedBy(Long updatedBy) {
+    public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
