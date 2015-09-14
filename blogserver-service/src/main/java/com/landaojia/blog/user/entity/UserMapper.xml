@@ -4,27 +4,30 @@
 	<resultMap type="com.landaojia.blog.user.dao.User" id="result"/>
     <sql id="select_all_cols">
     	b_user.ID,
+    	
 		b_user.username as username,
 		b_user.email as email,
-		b_user.crypted_pass as cryptedPass,
+		b_user.crypted_password as cryptedPassword,
 		b_user.role as role,
-		b_user.CREATE_DATE as createDate,
-		b_user.UPDATE_DATE as updateDate,
-		b_user.CREATE_BY as createBy,
-		b_user.UPDATE_BY as updateBy,
-		b_user.VERSION 
+		
+		b_user.deleted_flag as deletedFlag,
+		b_user.created_date as createdDate,
+		b_user.updated_date as updatedDate,
+		b_user.created_by as createdBy,
+		b_user.updated_by as updatedBy,
+		b_user.version as version 
     </sql>
     <sql id="insert_all_cols">
 		b_user.username,
 		b_user.email,
-		b_user.crypted_pass,
+		b_user.crypted_password,
 		b_user.role,
-		b_user.DELETED_FLAG,
-		b_user.CREATE_DATE,
-		b_user.UPDATE_DATE,
-		b_user.CREATE_BY,
-		b_user.UPDATE_BY,
-		b_user.VERSION 
+		b_user.deleted_flag,
+		b_user.created_date,
+		b_user.updated_date,
+		b_user.created_by,
+		b_user.updated_by,
+		b_user.version 
     </sql>
     <sql id="where_all">
 		WHERE DELETED_FLAG=0
@@ -37,8 +40,8 @@
 		<if test="cond.email != null">
 			AND b_user.email = #{cond.email}
 		</if>
-		<if test="cond.cryptedPass != null">
-			AND b_user.crypted_pass = #{cond.cryptedPass}
+		<if test="cond.cryptedPassword != null">
+			AND b_user.crypted_password = #{cond.cryptedPassword}
 		</if>
 		<if test="cond.role != null">
 			AND b_user.role = #{cond.role}
@@ -52,24 +55,24 @@
 				#{item}  
  			</foreach> 
 		</if>
-		<if test="cond.createDateB != null">
+		<if test="cond.createdDateB != null">
 		<![CDATA[
-			AND b_user.CREATE_DATE >= #{cond.createDateB}
+			AND b_user.created_date >= #{cond.createdDateB}
 		]]>
 		</if>
-		<if test="cond.createDateE != null">
+		<if test="cond.createdDateE != null">
 		<![CDATA[
-			AND b_user.CREATE_DATE <= #{cond.createDateE}
+			AND b_user.created_date <= #{cond.createdDateE}
 		]]>
 		</if>
-		<if test="cond.updateDateB != null">
+		<if test="cond.updatedDateB != null">
 		<![CDATA[
-			AND b_user.UPDATE_DATE >= #{cond.updateDateB}
+			AND b_user.updated_date >= #{cond.updatedDateB}
 		]]>
 		</if>
-		<if test="cond.updateDateE != null">
+		<if test="cond.updatedDateE != null">
 		<![CDATA[
-			AND b_user.UPDATE_DATE <= #{cond.updateDateE}
+			AND b_user.updated_date <= #{cond.updatedDateE}
 		]]>
 		</if>
     </sql>
@@ -86,7 +89,7 @@
 		FROM b_user 
 		<include refid="where_all"/>
 		<if test="start != null">
-		order by b_user.CREATE_DATE desc
+		order by b_user.CREATED_DATE desc
 		limit #{start},#{size}
 		</if>
 	</select>
@@ -106,9 +109,9 @@
 				(
 					#{username},
 					#{email},
-					#{cryptedPass},
+					#{cryptedPassword},
 					#{role},
-					0,current_timestamp(),current_timestamp(),#{createBy},#{updateBy},1
+					0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
 				)
 	</insert>
 	<insert id="batchInsert">
@@ -118,9 +121,9 @@
 				(
 					#{item.username},
 					#{item.email},
-					#{item.cryptedPass},
+					#{item.cryptedPassword},
 					#{item.role},
-					0,current_timestamp(),current_timestamp(),#{createBy},#{updateBy},1
+					0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
 				)
 			</foreach>
 	</insert>
@@ -130,9 +133,9 @@
 				(#{id},
 					#{username},
 					#{email},
-					#{cryptedPass},
+					#{cryptedPassword},
 					#{role},
-					0,current_timestamp(),current_timestamp(),#{createBy},#{updateBy},1
+					0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
 				)
 	</insert>
 	<insert id="batchInsertWithId">
@@ -142,9 +145,9 @@
 				(#{item.id},
 					#{item.username},
 					#{item.email},
-					#{item.cryptedPass},
+					#{item.cryptedPassword},
 					#{item.role},
-					0,current_timestamp(),current_timestamp(),#{createBy},#{updateBy},1
+					0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
 				)
 			</foreach>
 	</insert>
@@ -153,12 +156,12 @@
 		<set>
 			username = #{username},
 			email = #{email},
-			crypted_pass = #{cryptedPass},
+			crypted_password = #{cryptedPassword},
 			role = #{role},
 			id = #{id},
 			version = version + 1,
-			UPDATE_DATE = current_timestamp(),
-			UPDATE_BY=#{updateBy}
+			UPDATED_DATE = current_timestamp(),
+			UPDATED_BY=#{updatedBy}
 		</set>
 		where b_user.id = #{id} and b_user.version = #{version}
 	</update>

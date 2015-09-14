@@ -14,7 +14,7 @@ public class User extends BaseEntity {
 
 	private String email;//
 
-	private String cryptedPass;//
+	private String cryptedPassword;//
 
 	private String role;//
 
@@ -48,20 +48,16 @@ public class User extends BaseEntity {
 		this.email = email;
 	}
 
-	/**
-	 * return 
-	 */
-	public String getCryptedPass() {
-		return cryptedPass;
-	}
+	
+    public String getCryptedPassword() {
+        return cryptedPassword;
+    }
 
-	/**
-	 * @param cryptedPass
-	 *            
-	 */
-	public void setCryptedPass(String cryptedPass) {
-		this.cryptedPass = cryptedPass;
-	}
+    
+    public void setCryptedPassword(String cryptedPassword) {
+        this.cryptedPassword = cryptedPassword;
+    }
+
 
 	/**
 	 * return 
