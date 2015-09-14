@@ -13,7 +13,7 @@
 .DS_Store
 
 # Maven
-log/
+#log/
 target/
 blogserver-service/.settings
 blogserver-common/.settings

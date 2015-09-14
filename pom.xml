@@ -242,6 +242,14 @@
                 <artifactId>spring-test</artifactId>
                 <version>${version.spring}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <!--<version>4.0.0.RC2</version>-->
+                <version>${version.spring}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <!--  -->
             <dependency>
                 <groupId>com.thoughtworks.xstream</groupId>
@@ -456,13 +464,10 @@
                 <artifactId>groovy-all</artifactId>
                 <version>${version.groovy}</version>
             </dependency>
-            <!--<dependency>-->
-                <!--<groupId>com.outr.javasysmon</groupId>-->
-                <!--<artifactId>javasysmon_2.10</artifactId>-->
-                <!--<version>0.3.4</version>-->
-            <!--</dependency>-->
+
         </dependencies>
     </dependencyManagement>
+
 
 
 
