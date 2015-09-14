@@ -12,8 +12,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.landaojia.blog.blog.common.dao.CommonDao;
-import com.landaojia.blog.user.dao.User;
 import com.landaojia.blog.user.dao.UserDao;
+import com.landaojia.blog.user.entity.User;
 
 /**
  * Register the current Object into the method in controller

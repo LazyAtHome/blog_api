@@ -1,13 +1,12 @@
 package com.landaojia.blog.blog.common.dao;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,64 +16,122 @@ import com.landaojia.blog.blog.common.exception.CommonException;
 @Repository
 public class CommonDaoImpl extends SqlSessionDaoSupport implements CommonDao {
 
+    public static final String FAIL_OPERATION = "操作失败";
+
     @SuppressWarnings({ "serial" })
     private static final Map<String, String> statementMap = new HashMap<String, String>() {
 
         {
-            put("get", ".getByPrimaryKey");
-            put("remove", ".remove");
+            put("select", ".select");
+            put("remove", ".deleteById");
+            put("removeOnTondition", ".delete");
             put("create", ".insert");
+            put("createWithId", ".insertWithId");
+            put("createBatch", ".batchInsert");
+            put("createBatchWithId", ".batchInsertWithId");
             put("update", ".update");
-            put("countAll", ".countAll");
-            put("searchByMap", ".searchByMap");
-            put("search", ".search");
+            put("countOnCondition", ".count");
+            put("sumOnCondition", ".sum");
+            put("search", ".query");
         }
     };
 
-    public <C extends BaseEntity, ID extends Serializable> C findById(Class<C> clazz, ID id) {
-        if (id == null || clazz == null) throw new CommonException("操作失败");
-        return getSqlSession().selectOne(clazz.getSimpleName() + statementMap.get("get"), id);
+    @Override
+    public <T extends BaseEntity, ID extends Serializable> T findById(Class<T> clazz, ID id) {
+        if (id == null || clazz == null) throw new CommonException(FAIL_OPERATION);
+        return getSqlSession().selectOne(clazz.getName() + statementMap.get("select"), id);
     }
 
+    @Override
     @Transactional
-    public <C extends BaseEntity, ID extends Serializable> void remove(Class<C> clazz, ID id) {
-        if (id == null || clazz == null) throw new CommonException("操作失败");
-        getSqlSession().delete(clazz.getSimpleName() + statementMap.get("remove"), id);
+    public <T extends BaseEntity, ID extends Serializable> void removeById(Class<T> clazz, ID id) {
+        if (id == null || clazz == null) throw new CommonException(FAIL_OPERATION);
+        getSqlSession().delete(clazz.getName() + statementMap.get("remove"), id);
     }
 
+    @Override
     @Transactional
-    public <T extends BaseEntity> T create(T entity) {
-        if (entity == null) throw new CommonException("操作失败");
-        getSqlSession().insert(entity.getClass().getSimpleName() + statementMap.get("create"), entity);
+    public <T extends BaseEntity> void removeOnCondition(T entity) {
+        if (entity == null) throw new CommonException(FAIL_OPERATION);
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("cond", entity);
+        getSqlSession().update(entity.getClass().getName() + statementMap.get("removeOnTondition"), paramMap);
+    }
+
+    @Override
+    @Transactional
+    public <T extends BaseEntity> T insert(T entity) {
+        if (entity == null) throw new CommonException(FAIL_OPERATION);
+        getSqlSession().insert(entity.getClass().getName() + statementMap.get("create"), entity);
         // TODO 返回值含义
         return entity;
     }
 
+    @Override
+    @Transactional
+    public <T extends BaseEntity> T insertWithId(T entity) {
+        if (entity == null) throw new CommonException(FAIL_OPERATION);
+        getSqlSession().insert(entity.getClass().getName() + statementMap.get("createWithId"), entity);
+        // TODO 返回值含义
+        return entity;
+    }
+
+    @Override
+    @Transactional
+    public <T extends BaseEntity> List<T> batchInsert(List<T> entities) {
+        if (entities == null) throw new CommonException(FAIL_OPERATION);
+        try {
+            getSqlSession().insert(entities.getClass().getMethod("get", null).getReturnType().getClass().getName() + statementMap.get("createBatch"), entities);
+        } catch (NoSuchMethodException | SecurityException e) {
+            e.printStackTrace();
+            throw new CommonException(FAIL_OPERATION);
+        }
+        return entities;
+    }
+
+    @Override
+    @Transactional
+    public <T extends BaseEntity> List<T> batchInsertWithId(List<T> entities) {
+        if (entities == null) throw new CommonException(FAIL_OPERATION);
+        try {
+            getSqlSession().insert(entities.getClass().getMethod("get", null).getReturnType().getClass().getName() + statementMap.get("createBatchWithId"), entities);
+        } catch (NoSuchMethodException | SecurityException e) {
+            e.printStackTrace();
+            throw new CommonException(FAIL_OPERATION);
+        }
+        return entities;
+    }
+
+    @Override
     @Transactional
     public <T extends BaseEntity> T update(T entity) {
-        if (entity == null) throw new CommonException("操作失败");
-        getSqlSession().update(entity.getClass().getSimpleName() + statementMap.get("update"), entity);
+        if (entity == null) throw new CommonException(FAIL_OPERATION);
+        getSqlSession().update(entity.getClass().getName() + statementMap.get("update"), entity);
         // TODO 返回值含义
         return entity;
     }
 
-    public <C extends BaseEntity> Long countAll(Class<C> clazz) {
-        if (clazz == null) return 0L;
-        return getSqlSession().selectOne(clazz.getSimpleName() + statementMap.get("countAll"));
+    @Override
+    public <T extends BaseEntity> Long countOnCondition(T entity) {
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("cond", entity);
+        return getSqlSession().selectOne(entity.getClass().getName() + statementMap.get("countOnTondition"), paramMap);
     }
 
-    public <C extends BaseEntity> List<C> searchByMap(Class<C> clazz, Map<String, Object> paramMap) {
-        if (clazz == null || paramMap == null) return new ArrayList<C>();
-        return getSqlSession().selectList(clazz.getSimpleName() + statementMap.get("searchByMap"), paramMap);
+    @Override
+    public <T extends BaseEntity> BigDecimal sumOnTondition(T entity) {
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("cond", entity);
+        return getSqlSession().selectOne(entity.getClass().getName() + statementMap.get("sumOnTondition"), paramMap);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
-    public <C extends BaseEntity> List<C> search(C entity) {
-        if(entity == null) return new ArrayList<C>();
-        try {
-            return searchByMap(entity.getClass(), BeanUtils.describe(entity));
-        } catch (IllegalAccessException|InvocationTargetException|NoSuchMethodException e) {
-            return new ArrayList<C>();
-        }
+    public <T extends BaseEntity> List<T> search(T entity) {
+        if (entity == null) return new ArrayList<T>();
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("cond", entity);
+        return getSqlSession().selectList(entity.getClass().getName() + statementMap.get("search"), paramMap);
+
     }
 }

@@ -1,8 +1,8 @@
 package com.landaojia.mvc;
 
 import com.landaojia.blog.blog.common.dao.CommonDao;
-import com.landaojia.blog.user.dao.User;
 import com.landaojia.blog.user.dao.UserDao;
+import com.landaojia.blog.user.entity.User;
 
 /**
  * Just for getting current login user,and some other informations about this user;
