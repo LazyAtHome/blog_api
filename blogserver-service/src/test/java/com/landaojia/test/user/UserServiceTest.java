@@ -50,7 +50,7 @@ public class UserServiceTest extends AbstractTransactionalJUnit4SpringContextTes
     UserService userService;
     
     @Test
-    public void regTest() {
+    public void registerTest() {
         User user = new User();
         user.setUserName("tommyhanks");
         user.setCryptedPassword("123456dasda");
@@ -60,15 +60,17 @@ public class UserServiceTest extends AbstractTransactionalJUnit4SpringContextTes
     }
     
     @Test
-    public void login(){
+    public void loginTest(){
         startSession();
         userService.login("jason_lee", "landaojiaTEST", session);
         System.out.println(session.getAttribute(Current.SESSION_LOGIN).toString());
     }
     
     @Test
-    public void logout(){
-        login();
-        session.removeAttribute(Current.SESSION_LOGIN);
+    public void logoutTest(){
+        loginTest();
+        userService.logout(session);
+        endSession();
     }
+    
 }
