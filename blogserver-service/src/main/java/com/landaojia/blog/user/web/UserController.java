@@ -1,32 +1,50 @@
 package com.landaojia.blog.user.web;
 
-import com.landaojia.blog.common.result.JsonResult;
-import com.landaojia.blog.common.util.BaseController;
-import com.wordnik.swagger.annotations.ApiOperation;
-import org.springframework.stereotype.Controller;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.landaojia.blog.common.dao.CommonDao;
+import com.landaojia.blog.common.result.JsonResult;
+import com.landaojia.blog.user.entity.User;
+import com.landaojia.blog.user.service.UserService;
+import com.landaojia.mvc.Current;
 
 /**
  * Created by JUN on 15/9/11.
  */
-@Controller
+@RestController
 @RequestMapping("/users")
-public class UserController extends BaseController {
+public class UserController {
+    
+    @Resource
+    CommonDao commonDao;
+    
+    @Resource
+    UserService userService;
 
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    @ApiOperation(value = "用户登录", httpMethod = "POST", response = JsonResult.class, notes = "user login")
-    public JsonResult login(String uname, String password){
-        return JsonResult.success(uname);
+    public JsonResult login(String userName, String password, HttpServletRequest req){
+        userService.login(userName, password, req.getSession());
+        return JsonResult.success("ok");
     }
     
     @ResponseBody
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    @ApiOperation(value = "/logout", httpMethod = "GET", response = JsonResult.class, notes = "logout")
-    public JsonResult logout(){
+    public JsonResult logout(HttpServletRequest req){
+        req.getSession().removeAttribute(Current.SESSION_LOGIN);
         return JsonResult.success("ok");
     }
-
+    
+    @ResponseBody
+    @RequestMapping(value = "/reg", method = RequestMethod.POST)
+    public JsonResult register(User user){
+        userService.registerUser(user);
+        return JsonResult.success("ok");
+    }
 }

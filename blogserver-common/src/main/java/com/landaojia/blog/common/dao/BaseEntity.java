@@ -2,6 +2,7 @@ package com.landaojia.blog.common.dao;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -20,6 +21,7 @@ public abstract class BaseEntity implements Entity<Long>, Serializable {
     // static immutable variables definition---------end----------
 
     private Long    id;
+    transient List<Long> ids;
     private Integer version;
     private Integer deletedFlag;
     @JSONField(format="yyyy-MM-dd HH:mm:ss")
@@ -58,6 +60,16 @@ public abstract class BaseEntity implements Entity<Long>, Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    
+    public List<Long> getIds() {
+        return ids;
+    }
+
+    
+    public void setIds(List<Long> ids) {
+        this.ids = ids;
     }
 
     public Integer getVersion() {

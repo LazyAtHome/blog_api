@@ -1,24 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE project [
-        <!ELEMENT project (parent|modelVersion|artifactId|packaging|name|build|dependencies)*>
-        <!ATTLIST project
-                xmlns CDATA #REQUIRED
-                xmlns:xsi CDATA #REQUIRED
-                xsi:schemaLocation CDATA #REQUIRED>
-        <!ELEMENT parent (artifactId|groupId|version)*>
-        <!ELEMENT artifactId (#PCDATA)>
-        <!ELEMENT groupId (#PCDATA)>
-        <!ELEMENT version (#PCDATA)>
-        <!ELEMENT modelVersion (#PCDATA)>
-        <!ELEMENT packaging (#PCDATA)>
-        <!ELEMENT name (#PCDATA)>
-        <!ELEMENT build (finalName)*>
-        <!ELEMENT finalName (#PCDATA)>
-        <!ELEMENT dependencies (dependency)*>
-        <!ELEMENT dependency (groupId|artifactId|version|scope|groupid)*>
-        <!ELEMENT scope (#PCDATA)>
-        <!ELEMENT groupid (#PCDATA)>
-        ]>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -70,6 +50,11 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
+		<dependency>
+			<groupId>commons-validator</groupId>
+			<artifactId>commons-validator</artifactId>
+			<version>1.4.1</version>
+		</dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
@@ -158,18 +143,6 @@
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.mangofactory</groupId>-->
-            <!--<artifactId>swagger-springmvc</artifactId>-->
-            <!--<version>0.8.8</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.ajar</groupId>-->
-            <!--<artifactId>swagger-spring-mvc-ui</artifactId>-->
-            <!--<version>0.1</version>-->
-            <!--<scope>compile</scope>-->
-        <!--</dependency>-->
-
     </dependencies>
 
 
