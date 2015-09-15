@@ -7,10 +7,9 @@
      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd">
    	
-   	<!-- <context:component-scan base-package="com.landaojia.**"/> -->
+   	 <!--<context:component-scan base-package="com.landaojia.blog.common.**"/>-->
    	
    	<!-- common utility for basic operates of object from database, such as permanent,getting by primary key etc... -->
-	<bean id="commonDao" class="com.landaojia.blog.common.dao.CommonDaoImpl">
-		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
-	</bean>	
+
+	<!--<bean class="com.landaojia.blog.common.swagger.SwaggerConfig"/>-->
 </beans>

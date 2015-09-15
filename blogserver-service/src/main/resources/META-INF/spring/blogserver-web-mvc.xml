@@ -11,6 +11,17 @@
 <import resource="classpath:/META-INF/spring/blogserver-web-config.xml" />
 
 <context:annotation-config />
+    <!--<mvc:annotation-driven>-->
+        <!--<mvc:message-converters>-->
+            <!--<bean id="messageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />-->
+        <!--</mvc:message-converters>-->
+    <!--</mvc:annotation-driven>-->
+
+    <!--<bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" />-->
+    <!--<bean class="com.mangofactory.swagger.configuration.JacksonSwaggerSupport"  />-->
+
+
+
 <context:component-scan base-package="com.landaojia.blog" />
 <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     <property name="viewClass">
@@ -19,12 +30,18 @@
     <property name="prefix" value="/WEB-INF/jsp/" />
     <property name="suffix" value=".jsp" />
 </bean>
+
+
+
 <!--<bean id="exceptionResolver" class="com.landaojia.server.base.exception.ControllerExceptionResolver" />-->
 
 <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 	<property name="messageConverters">
 		<list>
 			<bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" >
+                <property name="objectMapper" ref="jacksonObjectMapper" />
+            </bean>
 		</list>
 	</property>
 	<property name="customArgumentResolvers">
@@ -34,6 +51,10 @@
 	</property>
 </bean>
 
+<bean id="jacksonObjectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />
+<bean class="com.landaojia.swagger.SwaggerConfig" />
+    <!--<bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" />-->
+    <!--<bean class="com.mangofactory.swagger.configuration.JacksonSwaggerSupport"  />-->
 
 <bean id="annotationMapper" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
     <property name="interceptors">

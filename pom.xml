@@ -261,6 +261,11 @@
                 <artifactId>jackson-databind</artifactId>
                 <version>${version.jackson}</version>
             </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${version.jackson}</version>
+            </dependency>
             <!--  -->
             <dependency>
                 <groupId>org.aspectj</groupId>
@@ -464,12 +469,8 @@
                 <artifactId>groovy-all</artifactId>
                 <version>${version.groovy}</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
-
-
-
 
 
 

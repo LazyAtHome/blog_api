@@ -2,6 +2,7 @@ package com.landaojia.blog.common.result;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.landaojia.blog.common.BaseObject;
 import com.landaojia.blog.common.Result;
 import org.springframework.beans.BeanUtils;
 
@@ -11,21 +12,21 @@ import java.util.Date;
  * 统一json对象
  * @author liuxi
  */
-public class JsonResult {
+public class JsonResult extends BaseObject{
 	/**
 	 * 返回码，1:成功
 	 */
-	public static final Integer CODE_SUCCESS = 0;
+	public static final int CODE_SUCCESS = 0;
 
 	/**
 	 * 返回码，0:业务或系统异常
 	 */
-	public static final Integer CODE_FAIL = 1;
+	public static final int CODE_FAIL = 1;
 
 	/**
 	 * 返回码, 0:成功, 1:失败
 	 */
-	private Integer responseCode;
+	private int responseCode;
 	
 	/**
 	 * 返回消息，当responseCode非0时，标识异常消息
@@ -77,7 +78,7 @@ public class JsonResult {
 	/**
 	 * 失败的调用
 	 */
-	public static JsonResult failure(Integer code, String msg){
+	public static JsonResult failure(int code, String msg){
 		JsonResult ar = new JsonResult();
 		ar.responseCode = code;
 		ar.responseMsg = msg;
@@ -100,11 +101,11 @@ public class JsonResult {
 		return JSON.toJSONString( this );
 	}
 
-	public Integer getResponseCode() {
+	public int getResponseCode() {
 		return responseCode;
 	}
 
-	public void setResponseCode(Integer responseCode) {
+	public void setResponseCode(int responseCode) {
 		this.responseCode = responseCode;
 	}
 

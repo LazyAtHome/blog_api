@@ -24,4 +24,7 @@
 	</bean>
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" p:dataSource-ref="dataSource" />
 	<tx:annotation-driven transaction-manager="transactionManager" />
+	<bean id="commonDao" class="com.landaojia.blog.common.dao.CommonDaoImpl">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+	</bean>
 </beans>
