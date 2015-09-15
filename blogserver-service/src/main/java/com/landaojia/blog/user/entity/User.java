@@ -45,8 +45,9 @@ public class User extends BaseEntity {
     /**
      * @param userName
      */
-    public void setUserName(String userName) {
+    public User setUserName(String userName) {
         this.userName = userName;
+        return this;
     }
 
     /**
@@ -59,8 +60,9 @@ public class User extends BaseEntity {
     /**
      * @param email
      */
-    public void setEmail(String email) {
+    public User setEmail(String email) {
         this.email = email;
+        return this;
     }
 
     /**

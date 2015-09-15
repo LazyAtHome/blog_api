@@ -37,7 +37,7 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public JsonResult logout(HttpServletRequest req){
-        req.getSession().removeAttribute(Current.SESSION_LOGIN);
+        userService.logout(req.getSession());
         return JsonResult.success("ok");
     }
     
@@ -46,5 +46,11 @@ public class UserController {
     public JsonResult register(User user){
         userService.registerUser(user);
         return JsonResult.success("ok");
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/current", method = RequestMethod.GET)
+    public JsonResult current(Current current){
+        return JsonResult.success(current.getCurrentUser());
     }
 }

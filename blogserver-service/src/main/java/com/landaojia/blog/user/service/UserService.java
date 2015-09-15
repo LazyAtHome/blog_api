@@ -13,4 +13,6 @@ public interface UserService {
      void registerUser(User user);
      
      void login(String userName, String password, HttpSession session);
+     
+     void logout(HttpSession session);
 }

@@ -12,6 +12,7 @@ import com.landaojia.blog.common.dao.CommonDao;
 import com.landaojia.blog.common.exception.CommonException;
 import com.landaojia.blog.common.exception.CommonExceptionCode;
 import com.landaojia.blog.common.util.DateUtil;
+import com.landaojia.blog.common.util.EncryptUtil;
 import com.landaojia.blog.common.util.Strings;
 import com.landaojia.blog.common.validation.Validator;
 import com.landaojia.blog.user.dao.UserDao;
@@ -34,10 +35,9 @@ public class UserServiceImpl implements UserService {
     public void registerUser(User user) {
         new Validator(user)
         .forProperty("userName").notNull().notBlank().length(7, 20).hasNoChineseWord()
-        .forProperty("email").notNull().maxLength(100).isEmail().hasNoChineseWord()
+        .forProperty("email").notNull().maxLength(100).isEmail().hasNoChineseWord().custom(commonDao.search(new User().setEmail(user.getEmail())).size() == 0, "该邮箱地址已被注册")
         .forProperty("cryptedPassword").notNull().notBlank().length(7, 20).custom(user.getCryptedPassword().equals(user.getCryptedPasswordConfirm()), "两次输入密码不一致").check();
-        List<User> users = commonDao.search(new User(user.getUserName()));
-        if(users.size() > 0){
+        if(commonDao.search(new User(user.getUserName())).size() > 0){
             throw new CommonException(CommonExceptionCode.USER_IS_EXISTS);
         } else {
             user.setCreatedDate(DateUtil.getCurrentDate());
@@ -45,6 +45,7 @@ public class UserServiceImpl implements UserService {
             user.setUpdatedBy("sys");
             user.setUpdatedDate(DateUtil.getCurrentDate());
             user.setRole("admin");
+            user.setCryptedPassword(EncryptUtil.encrypt(user.getCryptedPassword()));
             commonDao.insert(user);
         }
     }
@@ -59,7 +60,7 @@ public class UserServiceImpl implements UserService {
         if(user  == null){
             throw new CommonException(CommonExceptionCode.USER_NOT_EXISTS);
         }
-        if(!user.getCryptedPassword().equals(password)){//TODO 加密工具
+        if(!user.getCryptedPassword().equals(EncryptUtil.encrypt(password))){
             throw new CommonException(CommonExceptionCode.INCORRECT_PASSWORD);
         }
         if(session.getAttribute(Current.SESSION_LOGIN) == null){
@@ -67,6 +68,12 @@ public class UserServiceImpl implements UserService {
             return;
         }
         throw new CommonException(CommonExceptionCode.USER_IS_LOGINED);
+    }
+
+    @Override
+    public void logout(HttpSession session) {
+        if(session == null) throw new CommonException(CommonExceptionCode.E999999);
+        session.removeAttribute(Current.SESSION_LOGIN);
     }
 
 }
