@@ -10,13 +10,26 @@
             http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.1.xsd
             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd" >
 
-<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-	<property name="order" value="1"/>
-	<property name="locations">
-		<list>
-			<value>classpath:runtime.properties</value>
-		</list>
-	</property>
-</bean>
-
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="order" value="1" />
+		<property name="locations">
+			<list>
+				<value>classpath:runtime.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- just for junit testing -->
+	<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+        <property name="scopes">
+            <map>
+                <entry key="session">
+                    <bean class="org.springframework.web.context.request.SessionScope" />
+                </entry>
+                <entry key="request">
+                    <bean class="org.springframework.web.context.request.RequestScope" />
+                </entry>
+            </map>
+        </property>
+    </bean>
 </beans>

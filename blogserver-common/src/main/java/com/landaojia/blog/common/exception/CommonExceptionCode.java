@@ -9,6 +9,7 @@ public enum CommonExceptionCode {
     INCORRECT_PASSWORD("密码错误！"),
     USER_NOT_EXISTS("该用户不存在！"),
     USER_IS_EXISTS("用户名已被注册！"),
+    USER_IS_LOGINED("请勿重复登录！"),
     E999999("系统异常");
 
 
