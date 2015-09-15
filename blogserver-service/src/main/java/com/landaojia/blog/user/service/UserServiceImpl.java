@@ -62,12 +62,11 @@ public class UserServiceImpl implements UserService {
         if(!user.getCryptedPassword().equals(password)){//TODO 加密工具
             throw new CommonException(CommonExceptionCode.INCORRECT_PASSWORD);
         }
-        session.setAttribute(Current.SESSION_LOGIN, user);
-    }
-
-    @Override
-    public void logout(HttpSession session) {
-        session.removeAttribute(Current.SESSION_LOGIN);
+        if(session.getAttribute(Current.SESSION_LOGIN) == null){
+            session.setAttribute(Current.SESSION_LOGIN, user);
+            return;
+        }
+        throw new CommonException(CommonExceptionCode.USER_IS_LOGINED);
     }
 
 }
