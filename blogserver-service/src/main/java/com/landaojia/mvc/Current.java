@@ -12,6 +12,8 @@ import com.landaojia.blog.user.entity.User;
  */
 public class Current {
     
+    public static final String SESSION_LOGIN = "session-login";
+    
     CommonDao commonDao;
     
     UserDao userDao;
