@@ -14,6 +14,8 @@ public class User extends BaseEntity {
     private String email;//
 
     private String cryptedPassword;//
+    
+    transient private String cryptedPasswordConfirm;
 
     private String role;//
 
@@ -73,6 +75,17 @@ public class User extends BaseEntity {
      */
     public void setCryptedPassword(String cryptedPassword) {
         this.cryptedPassword = cryptedPassword;
+    }
+
+    
+    
+    public String getCryptedPasswordConfirm() {
+        return cryptedPasswordConfirm;
+    }
+
+    
+    public void setCryptedPasswordConfirm(String cryptedPasswordConfirm) {
+        this.cryptedPasswordConfirm = cryptedPasswordConfirm;
     }
 
     /**

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.landaojia.blog.common.dao.CommonDao;
 import com.landaojia.blog.common.exception.CommonException;
 import com.landaojia.blog.common.exception.CommonExceptionCode;
+import com.landaojia.blog.common.util.DateUtil;
 import com.landaojia.blog.common.util.Strings;
 import com.landaojia.blog.common.validation.Validator;
 import com.landaojia.blog.user.dao.UserDao;
@@ -32,15 +33,19 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void registerUser(User user) {
         new Validator(user)
-        .forProperty("userName").notNull().length(7, 20).hasNoChineseWord()
-        .forProperty("cryptedPassword").notNull().check();
-        List<User> users = commonDao.search(user);
-        if(users.size() != 1){
+        .forProperty("userName").notNull().notBlank().length(7, 20).hasNoChineseWord()
+        .forProperty("email").notNull().maxLength(100).isEmail().hasNoChineseWord()
+        .forProperty("cryptedPassword").notNull().notBlank().length(7, 20).custom(user.getCryptedPassword().equals(user.getCryptedPasswordConfirm()), "两次输入密码不一致").check();
+        List<User> users = commonDao.search(new User(user.getUserName()));
+        if(users.size() > 0){
             throw new CommonException(CommonExceptionCode.USER_IS_EXISTS);
         } else {
-            User u = users.get(0);
-            u.setCryptedPassword(user.getCryptedPassword());
-            commonDao.insert(u);
+            user.setCreatedDate(DateUtil.getCurrentDate());
+            user.setCreatedBy("sys");
+            user.setUpdatedBy("sys");
+            user.setUpdatedDate(DateUtil.getCurrentDate());
+            user.setRole("admin");
+            commonDao.insert(user);
         }
     }
 
