@@ -4,6 +4,7 @@
 .idea/*
 
 # Eclipse
+.settings
 .classpath
 .project
 **/.classpath
