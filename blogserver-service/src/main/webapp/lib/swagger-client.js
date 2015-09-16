@@ -1891,7 +1891,6 @@ var SwaggerModel = function (modelName, obj) {
         }
       }
     }
-    console.log(propertyName+"  "+obj.properties[propertyName]+"  "+this);
     var prop = new SwaggerModelProperty(propertyName, obj.properties[propertyName], this);
     this.properties.push(prop);
   }
