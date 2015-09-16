@@ -5,31 +5,30 @@ import javax.annotation.Resource;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.landaojia.blog.common.dao.CommonDao;
 import com.landaojia.blog.post.entity.Post;
 import com.landaojia.blog.post.service.PostService;
-import com.landaojia.blog.user.service.UserService;
+import com.landaojia.blog.threadlocal.UserThreadLocal;
+import com.landaojia.blog.user.entity.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)  
-@ContextConfiguration("classpath*:META-INF/spring/*.xml")
+@ContextConfiguration(locations = {"classpath:META-INF/spring/blogserver-dao.xml","classpath:META-INF/spring/blogserver-web-config.xml", "classpath:META-INF/spring/blogserver-context.xml"})
 public class PostServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
      
-    private MockHttpSession session;
-    
-    @Resource
-    private UserService userService;
-    
     @Resource
     private PostService postService;
     
+    @Resource
+    private CommonDao commonDao;
+    
     @Before
     public void setUp(){
-        session = new MockHttpSession();
-        this.userService.login("jason_lee", "landaojiaTEST", session);
+        User user = this.commonDao.findById(User.class, 1L);
+        UserThreadLocal.set(user);
     }
     
     @Test
@@ -37,7 +36,7 @@ public class PostServiceTest extends AbstractTransactionalJUnit4SpringContextTes
         Post post = new Post();
         post.setTitle("test");
         post.setContent("test");
-        this.postService.create(post, session);
+        this.postService.create(post);
     }
 
     @Test
@@ -47,7 +46,7 @@ public class PostServiceTest extends AbstractTransactionalJUnit4SpringContextTes
 
     @Test
     public void testQueryById() {
-        System.out.println(this.postService.queryById(2L));
+        System.out.println(this.postService.queryById(1L));
     }
 
     @Test
@@ -55,12 +54,12 @@ public class PostServiceTest extends AbstractTransactionalJUnit4SpringContextTes
         Post post = new Post();
         post.setTitle("test");
         post.setContent("test");
-        this.postService.update(2L, post, session);
+        this.postService.update(1L, post);
     }
 
     @Test
     public void testDelete() {
-        this.postService.delete(2L, session);
+        this.postService.delete(1L);
     }
 
 }
