@@ -54,4 +54,12 @@
         </list>
     </property>
 </bean>
+
+<mvc:interceptors>
+	<mvc:interceptor>
+		<mvc:mapping path="/posts/**" />
+		<bean class="com.landaojia.blog.interceptor.UserLoginHandlerInterceptor" />
+	</mvc:interceptor>
+</mvc:interceptors>
+
 </beans>

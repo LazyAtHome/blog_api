@@ -3,19 +3,17 @@ package com.landaojia.blog.post.service;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.druid.util.StringUtils;
 import com.landaojia.blog.common.dao.CommonDao;
 import com.landaojia.blog.common.exception.CommonException;
 import com.landaojia.blog.common.exception.CommonExceptionCode;
 import com.landaojia.blog.common.validation.Validator;
 import com.landaojia.blog.post.entity.Post;
+import com.landaojia.blog.threadlocal.UserThreadLocal;
 import com.landaojia.blog.user.entity.User;
-import com.landaojia.mvc.Current;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -25,9 +23,9 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public void create(Post post, HttpSession session) {
-        User user = checkLogin(session);
+    public void create(Post post) {
         validate(post);
+        User user = UserThreadLocal.get();
         post.setUserId(user.getId());
         post.setViewCount(0L);
         post.setCreatedBy(user.getEmail());
@@ -42,18 +40,18 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post queryById(Long id) {
-        Post template = new Post();
-        template.setId(id);
-        List<Post> list = this.commonDao.search(template);
-        return list.size() > 0 ? list.get(0) : null;
+        return this.commonDao.findById(Post.class, id);
     }
 
     @Transactional
     @Override
-    public void update(Long id, Post post, HttpSession session) {
-        User user = checkLogin(session);
-        Post oldPost = checkAuth(id, user);
+    public void update(Long id, Post post) {
         validate(post);
+        User user = UserThreadLocal.get();
+        Post oldPost = this.commonDao.findById(Post.class, id);
+        if(null == oldPost) {
+            throw new CommonException(CommonExceptionCode.POST_NOT_EXISTS);
+        }
         oldPost.setTitle(post.getTitle());
         oldPost.setContent(post.getContent());
         oldPost.setUpdatedBy(user.getEmail());
@@ -62,9 +60,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public void delete(Long id, HttpSession session) {
-        User user = checkLogin(session);
-        checkAuth(id, user);
+    public void delete(Long id) {
         this.commonDao.removeById(Post.class, id);
     }
 
@@ -73,28 +69,6 @@ public class PostServiceImpl implements PostService {
         v.forProperty("title").notNull().maxLength(50);
         v.forProperty("content").notNull().maxLength(500);
         v.check();
-    }
-
-    private User checkLogin(HttpSession session) {
-        User user = (User) session.getAttribute(Current.SESSION_LOGIN);
-        if (null == user) {
-            throw new CommonException(CommonExceptionCode.USER_NOT_LOGIN);
-        }
-        return user;
-    }
-
-    private Post checkAuth(Long id, User user) {
-        Post template = new Post();
-        template.setId(id);
-        List<Post> list = this.commonDao.search(template);
-        Post post = list.size() > 0 ? list.get(0) : null;
-        if (null == post) {
-            throw new CommonException(CommonExceptionCode.POST_NOT_EXISTS);
-        }
-        if (!(post.getUserId().equals(user.getId()) || StringUtils.equals("admin", user.getRole()))) {
-            throw new CommonException(CommonExceptionCode.POST_NO_AUTH);
-        }
-        return post;
     }
 
 }
