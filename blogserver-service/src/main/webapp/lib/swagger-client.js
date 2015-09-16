@@ -1891,6 +1891,7 @@ var SwaggerModel = function (modelName, obj) {
         }
       }
     }
+    console.log(propertyName+"  "+obj.properties[propertyName]+"  "+this);
     var prop = new SwaggerModelProperty(propertyName, obj.properties[propertyName], this);
     this.properties.push(prop);
   }
@@ -1956,7 +1957,8 @@ SwaggerModel.prototype.createJSONSample = function (modelsToIgnore) {
 var SwaggerModelProperty = function (name, obj, model) {
   this.name = name;
   this.dataType = obj.type || obj.dataType || obj.$ref;
-  this.isCollection = this.dataType && (this.dataType.toLowerCase() === 'array' || this.dataType.toLowerCase() === 'list' || this.dataType.toLowerCase() === 'set');
+
+  this.isCollection = this.dataType &&this.dataType.toLowerCase &&(this.dataType.toLowerCase() === 'array' || this.dataType.toLowerCase() === 'list' || this.dataType.toLowerCase() === 'set');
   this.descr = obj.description;
   this.required = obj.required;
   this.defaultValue = applyModelPropertyMacro(obj, model);
