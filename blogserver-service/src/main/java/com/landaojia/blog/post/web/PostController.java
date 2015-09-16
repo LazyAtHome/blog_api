@@ -23,7 +23,7 @@ public class PostController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public JsonResult create(Post post, HttpSession session) {
-        postService.create(post, session);
+        this.postService.create(post, session);
         return JsonResult.success("ok");
     }
 
@@ -31,26 +31,26 @@ public class PostController {
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public JsonResult queryAll() {
         // TODO pagination
-        return JsonResult.success(postService.queryAll());
+        return JsonResult.success(this.postService.queryAll());
     }
 
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public JsonResult queryById(@PathVariable("id") Long id) {
-        return JsonResult.success(postService.queryById(id));
+        return JsonResult.success(this.postService.queryById(id));
     }
 
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public JsonResult update(@PathVariable("id") Long id, Post post, HttpSession session) {
-        postService.update(id, post, session);
+        this.postService.update(id, post, session);
         return JsonResult.success("ok");
     }
 
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public JsonResult delete(@PathVariable("id") Long id, HttpSession session) {
-        postService.delete(id, session);
+        this.postService.delete(id, session);
         return JsonResult.success("ok");
     }
 
