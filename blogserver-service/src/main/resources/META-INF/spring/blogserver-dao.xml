@@ -18,6 +18,13 @@
 		<property name="maxActive" value="${landaojia.dao.maxActive}" />
 	</bean>
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="plugins">
+			<list>
+				<bean class="com.github.miemiedev.mybatis.paginator.OffsetLimitInterceptor">
+					<property name="dialectClass" value="com.github.miemiedev.mybatis.paginator.dialect.MySQLDialect"/>
+				</bean>
+			</list>
+		</property>
 		<property name="dataSource" ref="dataSource" />
 		<property name="mapperLocations" value="classpath*:/com/landaojia/blog/*/entity/*Mapper.xml" />
 		<property name="failFast" value="true" />
