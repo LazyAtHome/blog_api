@@ -7,9 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.landaojia.blog.common.exception.CommonException;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.landaojia.blog.common.exception.CommonException;
 
 public class CommonDaoImpl extends SqlSessionDaoSupport implements CommonDao {
 
@@ -128,6 +129,11 @@ public class CommonDaoImpl extends SqlSessionDaoSupport implements CommonDao {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("cond", entity);
         return getSqlSession().selectList(entity.getClass().getName() + statementMap.get("search"), paramMap);
+    }
 
+    @Override
+    public <T extends BaseEntity> Pagination<T> searchByPage(Pagination<T> page) {
+        if (page == null) return new  Pagination<T>();
+        return  page.setResults(getSqlSession().selectList(page.getCondClass().getName() + statementMap.get("search"), page.getCondMap(), page));
     }
 }
