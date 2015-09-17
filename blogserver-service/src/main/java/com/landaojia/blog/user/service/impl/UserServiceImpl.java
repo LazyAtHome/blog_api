@@ -3,7 +3,6 @@ package com.landaojia.blog.user.service.impl;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +17,6 @@ import com.landaojia.blog.common.validation.Validator;
 import com.landaojia.blog.user.dao.UserDao;
 import com.landaojia.blog.user.entity.User;
 import com.landaojia.blog.user.service.UserService;
-import com.landaojia.mvc.Current;
 
 /**
  * Created by JUN on 15/9/9.
@@ -38,7 +36,7 @@ public class UserServiceImpl implements UserService {
         .forProperty("userName").notNull().notBlank().length(7, 20).hasNoChineseWord()
         .forProperty("email").notNull().maxLength(100).isEmail().hasNoChineseWord().custom(commonDao.search(new User().setEmail(user.getEmail())).size() == 0, "该邮箱地址已被注册")
         .forProperty("cryptedPasswordConfirm").notNull().notBlank().length(7, 20)
-        .forProperty("cryptedPassword").notNull().notBlank().length(7, 20).custom(user.getCryptedPassword().equals(user.getCryptedPasswordConfirm()), "两次输入密码不一致").check();
+        .forProperty("cryptedPassword").notNull().notBlank().length(7, 20).custom(user.getCryptedPasswordConfirm() == null ? false : user.getCryptedPassword().equals(user.getCryptedPasswordConfirm()), "两次输入密码不一致").check();
         if(commonDao.search(new User(user.getUserName())).size() > 0){
             throw new CommonException(CommonExceptionCode.USER_IS_EXISTS);
         } else {
@@ -53,7 +51,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User login(String userName, String password, HttpSession session) {
+    public User login(String userName, String password) {
         if(Strings.isNullOrEmpty(userName, password)){
             throw new CommonException(CommonExceptionCode.E999999);
         }
@@ -65,17 +63,12 @@ public class UserServiceImpl implements UserService {
         if(!user.getCryptedPassword().equals(EncryptUtil.encrypt(password))){
             throw new CommonException(CommonExceptionCode.INCORRECT_PASSWORD);
         }
-        if(session.getAttribute(Current.SESSION_LOGIN) == null){
-            session.setAttribute(Current.SESSION_LOGIN, user.getId());
-            return user;
-        }
-        throw new CommonException(CommonExceptionCode.USER_IS_LOGINED);
+        return user;
     }
 
     @Override
-    public void logout(HttpSession session) {
-        if(session == null) throw new CommonException(CommonExceptionCode.E999999);
-        session.removeAttribute(Current.SESSION_LOGIN);
+    public void logout(Long userId) {
+        //TODO other businesses in service layer
     }
 
 }

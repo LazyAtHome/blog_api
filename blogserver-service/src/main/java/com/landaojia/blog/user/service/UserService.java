@@ -1,7 +1,5 @@
 package com.landaojia.blog.user.service;
 
-import javax.servlet.http.HttpSession;
-
 import com.landaojia.blog.user.entity.User;
 
 /**
@@ -12,7 +10,7 @@ public interface UserService {
 
      void registerUser(User user);
      
-     User login(String userName, String password, HttpSession session);
+     User login(String userName, String password);
      
-     void logout(HttpSession session);
+     void logout(Long uerId);
 }

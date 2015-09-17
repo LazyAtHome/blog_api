@@ -31,12 +31,14 @@ public class HttpHandlerExceptionResolver implements HandlerExceptionResolver {
 			} else if (ex instanceof BindException) {
 				response.setStatus(HttpServletResponse.SC_OK);
 				badRequestReason.put("validateError", convertToValidateException((BindException) ex).getErrors());
+				badRequestReason.put("error", "数据绑定失败");
 			} else if (ex instanceof ValidateException) {
 				response.setStatus(HttpServletResponse.SC_OK);
 				badRequestReason.put("validateError", ((ValidateException) ex).getErrors());
+				badRequestReason.put("error", ((CommonException) ex).getMessage());
 			} else if (ex instanceof CommonException) {
 				response.setStatus(HttpServletResponse.SC_OK);
-				badRequestReason.put("applicationError", ((CommonException) ex).getMessage());
+				badRequestReason.put("error", ((CommonException) ex).getMessage());
 			} else {
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				ex.printStackTrace();
@@ -48,7 +50,8 @@ public class HttpHandlerExceptionResolver implements HandlerExceptionResolver {
 			    response.addHeader("Pragma", "no-cache");
 			    response.addHeader("Cache-Control", "no-cache");
 			    response.addHeader("Expires", "0");
-			    JSON.writeJSONStringTo(JsonResult.failure(badRequestReason), response.getWriter());
+			    response.addHeader("Access-Control-Allow-Origin", "*");
+			    JSON.writeJSONStringTo(JsonResult.failure(badRequestReason).setResponseMsg(badRequestReason.get("error").toString()), response.getWriter());
 		        response.getWriter().flush();
 			}
 		} catch (Throwable throwable){

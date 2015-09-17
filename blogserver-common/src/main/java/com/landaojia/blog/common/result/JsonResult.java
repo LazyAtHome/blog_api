@@ -1,12 +1,13 @@
 package com.landaojia.blog.common.result;
 
+import java.util.Date;
+
+import org.springframework.beans.BeanUtils;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.landaojia.blog.common.BaseObject;
 import com.landaojia.blog.common.Result;
-import org.springframework.beans.BeanUtils;
-
-import java.util.Date;
 
 /**
  * 统一json对象
@@ -120,8 +121,9 @@ public class JsonResult extends BaseObject{
 		return responseMsg;
 	}
 
-	public void setResponseMsg(String responseMsg) {
+	public JsonResult setResponseMsg(String responseMsg) {
 		this.responseMsg = responseMsg;
+		return this;
 	}
 
 	public Object getData() {
