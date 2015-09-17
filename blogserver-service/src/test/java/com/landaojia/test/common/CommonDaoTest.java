@@ -1,20 +1,20 @@
 package com.landaojia.test.common;
 
+import static org.junit.Assert.assertFalse;
+
 import javax.annotation.Resource;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.landaojia.blog.common.dao.CommonDao;
 import com.landaojia.blog.common.dao.Pagination;
 import com.landaojia.blog.user.entity.User;
+import com.landaojia.test.AbstractJunitContextTests;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:META-INF/spring/blogserver-dao.xml","classpath:META-INF/spring/blogserver-web-config.xml", "classpath:META-INF/spring/blogserver-context.xml"})
-public class CommonDaoTest extends AbstractJUnit4SpringContextTests {
+@Transactional(propagation= Propagation.NOT_SUPPORTED)
+public class CommonDaoTest extends AbstractJunitContextTests {
     @Resource
     CommonDao commonDao;
     
@@ -23,5 +23,17 @@ public class CommonDaoTest extends AbstractJUnit4SpringContextTests {
         User user = new User("Jason_Lee");
         Pagination<User> pag = commonDao.searchByPage(new Pagination<User>(user));
         System.out.println(pag.toString());
+    }
+    
+    @Test
+    public void pagination2Test(){
+        User user = new User("Jason_Lee");
+        Pagination<User> pag = commonDao.searchByPage(new Pagination<User>(user, 2, 20));
+        System.out.println(pag.toString());
+    }
+    
+    @Test
+    public void findByIdTest(){
+        assertFalse("失败", commonDao.findById(User.class, 1L) == null);
     }
 }

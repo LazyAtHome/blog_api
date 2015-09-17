@@ -48,7 +48,7 @@ public class HttpHandlerExceptionResolver implements HandlerExceptionResolver {
 			    response.addHeader("Pragma", "no-cache");
 			    response.addHeader("Cache-Control", "no-cache");
 			    response.addHeader("Expires", "0");
-			    JSON.writeJSONStringTo(JsonResult.success(badRequestReason), response.getWriter());
+			    JSON.writeJSONStringTo(JsonResult.failure(badRequestReason), response.getWriter());
 		        response.getWriter().flush();
 			}
 		} catch (Throwable throwable){
