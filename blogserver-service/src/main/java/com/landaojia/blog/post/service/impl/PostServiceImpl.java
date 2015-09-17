@@ -1,25 +1,35 @@
-package com.landaojia.blog.post.service;
+package com.landaojia.blog.post.service.impl;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.miemiedev.mybatis.paginator.domain.Order;
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.landaojia.blog.common.dao.CommonDao;
 import com.landaojia.blog.common.exception.CommonException;
 import com.landaojia.blog.common.exception.CommonExceptionCode;
 import com.landaojia.blog.common.validation.Validator;
+import com.landaojia.blog.post.dao.PostDao;
 import com.landaojia.blog.post.entity.Post;
+import com.landaojia.blog.post.service.PostService;
 import com.landaojia.blog.threadlocal.UserThreadLocal;
 import com.landaojia.blog.user.entity.User;
 
 @Service
 public class PostServiceImpl implements PostService {
-
+    
     @Resource
     private CommonDao commonDao;
+
+    @Resource
+    private PostDao postDao;
 
     @Transactional
     @Override
@@ -34,8 +44,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> queryAll() {
-        return this.commonDao.search(new Post());
+    public Map<String, Object> queryAll(Integer page, Integer limit) {
+        PageList<Post> pageList =(PageList<Post>) this.postDao.searchByPage(new Post(), new PageBounds(page, limit, Order.formString("createdDate.desc")));
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("posts", new ArrayList<Post>(pageList));
+        map.put("pageInfo", pageList.getPaginator());
+        return map;
     }
 
     @Override
@@ -66,8 +80,8 @@ public class PostServiceImpl implements PostService {
 
     private void validate(Post post) {
         Validator v = new Validator(post);
-        v.forProperty("title").notNull().maxLength(50);
-        v.forProperty("content").notNull().maxLength(500);
+        v.forProperty("title").notNull().notBlank().maxLength(50);
+        v.forProperty("content").notNull().notBlank().maxLength(500);
         v.check();
     }
 

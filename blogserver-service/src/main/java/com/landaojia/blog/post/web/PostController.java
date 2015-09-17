@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +20,7 @@ public class PostController {
 
     @Resource
     private PostService postService;
-    
+
     @LoginRequired
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
@@ -30,9 +31,9 @@ public class PostController {
 
     @ResponseBody
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public JsonResult queryAll() {
-        // TODO pagination
-        return JsonResult.success(this.postService.queryAll());
+    public JsonResult queryAll(@RequestParam(required = false, defaultValue = "1") Integer page,
+            @RequestParam(required = false, defaultValue = "10") Integer limit) {
+        return JsonResult.success(this.postService.queryAll(page, limit));
     }
 
     @ResponseBody
@@ -40,7 +41,7 @@ public class PostController {
     public JsonResult queryById(@PathVariable("id") Long id) {
         return JsonResult.success(this.postService.queryById(id));
     }
-    
+
     @LoginRequired
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
@@ -48,7 +49,7 @@ public class PostController {
         this.postService.update(id, post);
         return JsonResult.success("ok");
     }
-    
+
     @LoginRequired
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

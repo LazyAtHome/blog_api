@@ -4,20 +4,15 @@ import javax.annotation.Resource;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.landaojia.blog.common.dao.CommonDao;
 import com.landaojia.blog.post.entity.Post;
 import com.landaojia.blog.post.service.PostService;
 import com.landaojia.blog.threadlocal.UserThreadLocal;
 import com.landaojia.blog.user.entity.User;
+import com.landaojia.test.AbstractJunitContextTests;
 
-@RunWith(SpringJUnit4ClassRunner.class)  
-@ContextConfiguration(locations = {"classpath:META-INF/spring/blogserver-dao.xml","classpath:META-INF/spring/blogserver-web-config.xml", "classpath:META-INF/spring/blogserver-context.xml"})
-public class PostServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class PostServiceTest extends AbstractJunitContextTests {
      
     @Resource
     private PostService postService;
@@ -41,7 +36,7 @@ public class PostServiceTest extends AbstractTransactionalJUnit4SpringContextTes
 
     @Test
     public void testQueryAll() {
-        System.out.println(this.postService.queryAll());
+        System.out.println(this.postService.queryAll(1, 10));
     }
 
     @Test
