@@ -1,6 +1,6 @@
 package com.landaojia.blog.post.service;
 
-import java.util.List;
+import java.util.Map;
 
 import com.landaojia.blog.post.entity.Post;
 
@@ -8,7 +8,7 @@ public interface PostService {
 
     public void create(Post post);
 
-    public List<Post> queryAll();
+    public Map<String, Object> queryAll(Integer page, Integer limit);
 
     public Post queryById(Long id);
 

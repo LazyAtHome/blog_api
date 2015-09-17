@@ -35,7 +35,7 @@ public class UserLoginHandlerInterceptor implements HandlerInterceptor {
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
         LoginRequired annotation = method.getAnnotation(LoginRequired.class);
-        if (annotation != null) {
+        if (null != annotation) {
             Long userId = (Long) request.getSession().getAttribute(Current.SESSION_LOGIN);
             if (null == userId) {
                 throw new CommonException(CommonExceptionCode.USER_NOT_LOGIN);
