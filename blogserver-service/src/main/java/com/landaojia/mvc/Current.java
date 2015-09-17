@@ -18,18 +18,17 @@ public class Current {
     
     UserDao userDao;
     
-    User user;
+    Long userId;
 
-
-    public Current(CommonDao commonDao, UserDao userDao, User user) {
+    public Current(CommonDao commonDao, UserDao userDao, Long userId) {
         super();
         this.commonDao = commonDao;
         this.userDao = userDao;
-        this.user = user;
+        this.userId = userId;
     }
     
     public User getCurrentUser(){
-        return user;
+        return commonDao.findById(User.class, userId);
     }
     
 }

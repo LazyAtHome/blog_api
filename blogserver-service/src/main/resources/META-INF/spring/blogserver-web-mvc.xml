@@ -20,7 +20,6 @@
     <property name="suffix" value=".jsp" />
 </bean>
 <bean id="exceptionResolver" class="com.landaojia.mvc.HttpHandlerExceptionResolver" />
-
 <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 	<property name="messageConverters">
 		<list>

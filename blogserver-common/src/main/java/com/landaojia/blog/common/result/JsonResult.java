@@ -65,6 +65,13 @@ public class JsonResult extends BaseObject{
 		return ar;
 	}
 	
+	public static JsonResult failure(Object data){
+	    JsonResult ar = new JsonResult();
+	    ar.responseCode = CODE_FAIL;
+	    ar.data = data;
+	    return ar;
+	}
+	
 	/**
 	 * 失败的调用
 	 */

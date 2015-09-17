@@ -1,4 +1,4 @@
-package com.landaojia.blog.user.service;
+package com.landaojia.blog.user.service.impl;
 
 import java.util.List;
 
@@ -17,6 +17,7 @@ import com.landaojia.blog.common.util.Strings;
 import com.landaojia.blog.common.validation.Validator;
 import com.landaojia.blog.user.dao.UserDao;
 import com.landaojia.blog.user.entity.User;
+import com.landaojia.blog.user.service.UserService;
 import com.landaojia.mvc.Current;
 
 /**
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService {
         new Validator(user)
         .forProperty("userName").notNull().notBlank().length(7, 20).hasNoChineseWord()
         .forProperty("email").notNull().maxLength(100).isEmail().hasNoChineseWord().custom(commonDao.search(new User().setEmail(user.getEmail())).size() == 0, "该邮箱地址已被注册")
+        .forProperty("cryptedPasswordConfirm").notNull().notBlank().length(7, 20)
         .forProperty("cryptedPassword").notNull().notBlank().length(7, 20).custom(user.getCryptedPassword().equals(user.getCryptedPasswordConfirm()), "两次输入密码不一致").check();
         if(commonDao.search(new User(user.getUserName())).size() > 0){
             throw new CommonException(CommonExceptionCode.USER_IS_EXISTS);
@@ -51,21 +53,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void login(String userName, String password, HttpSession session) {
+    public User login(String userName, String password, HttpSession session) {
         if(Strings.isNullOrEmpty(userName, password)){
             throw new CommonException(CommonExceptionCode.E999999);
         }
         List<User> users = commonDao.search(new User(userName));
-        User user = users.get(0);
-        if(user  == null){
+        if(users.size() != 1){
             throw new CommonException(CommonExceptionCode.USER_NOT_EXISTS);
         }
+        User user = users.get(0);
         if(!user.getCryptedPassword().equals(EncryptUtil.encrypt(password))){
             throw new CommonException(CommonExceptionCode.INCORRECT_PASSWORD);
         }
         if(session.getAttribute(Current.SESSION_LOGIN) == null){
-            session.setAttribute(Current.SESSION_LOGIN, user);
-            return;
+            session.setAttribute(Current.SESSION_LOGIN, user.getId());
+            return user;
         }
         throw new CommonException(CommonExceptionCode.USER_IS_LOGINED);
     }

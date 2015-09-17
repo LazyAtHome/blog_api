@@ -37,7 +37,10 @@ public class CommonDaoImpl extends SqlSessionDaoSupport implements CommonDao {
     @Override
     public <T extends BaseEntity, ID extends Serializable> T findById(Class<T> clazz, ID id) {
         if (id == null || clazz == null) throw new CommonException(FAIL_OPERATION);
-        return getSqlSession().selectOne(clazz.getName() + statementMap.get("select"), id);
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("id", id);
+        paramMap.put("lock", false);
+        return getSqlSession().selectOne(clazz.getName() + statementMap.get("select"), paramMap);
     }
 
     @Override

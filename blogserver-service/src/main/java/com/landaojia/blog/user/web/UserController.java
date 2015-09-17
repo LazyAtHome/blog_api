@@ -28,10 +28,9 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiOperation(value = "用户登录",httpMethod = "POST",notes = "用户登录",response = JsonResult.class)
-    public JsonResult login(@ApiParam(required = true) @RequestParam String  userName,
-                            @ApiParam(required = true) @RequestParam String password, HttpServletRequest req){
-        userService.login(userName, password, req.getSession());
-        return JsonResult.success("ok");
+    public JsonResult login(@ApiParam(required = true) String  userName,
+                            @ApiParam(required = true) String password, HttpServletRequest req){
+        return JsonResult.success(userService.login(userName, password, req.getSession()));
     }
     
     @ResponseBody
@@ -45,7 +44,7 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/reg", method = RequestMethod.POST)
     @ApiOperation(value = "用户注册",httpMethod = "POST",notes = "用户注册",response = JsonResult.class)
-    public JsonResult register(@ApiParam(required = true) @RequestParam User user){
+    public JsonResult register(@ApiParam(required = true) User user){
         userService.registerUser(user);
         return JsonResult.success("ok");
     }
@@ -53,7 +52,7 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/current", method = RequestMethod.GET)
     @ApiOperation(value = "获取当前用户信息",httpMethod = "GET",notes = "获取当前用户信息",response = JsonResult.class)
-    public JsonResult current(@ApiParam(required = true) @RequestParam Current current){
+    public JsonResult current(@ApiParam(required = true) Current current){
         return JsonResult.success(current.getCurrentUser());
     }
 }
