@@ -28,6 +28,8 @@ public class Pagination<T extends BaseEntity> extends PageBounds {
     
     private Map<String, Object> condMap;
     
+    private Class<T> entityClass;
+    
     public List<T> getResults() {
         return results;
     }
@@ -42,8 +44,9 @@ public class Pagination<T extends BaseEntity> extends PageBounds {
         super(page, limit, orders);
     }
     
-    public Pagination(int page, int limit) {
-        super(page, limit);
+    public Pagination(T cond, int page, int limit, Order... orders) {
+        super(page, limit, orders);
+        this.cond = cond;
     }
     
     public Pagination(T cond) {
@@ -51,9 +54,15 @@ public class Pagination<T extends BaseEntity> extends PageBounds {
         this.cond = cond;
     }
     
-    public Pagination(Map<String, Object> condMap) {
+    public Pagination(Class<T> entityClass, Map<String, Object> condMap, int page, int limit, Order... orders) {
+        super(page, limit, orders);
+        this.condMap = condMap;
+        this.entityClass = entityClass;
+    }
+    public Pagination(Class<T> entityClass, Map<String, Object> condMap) {
         super(PageBounds.NO_PAGE, DEFAULT_LIMIT);
         this.condMap = condMap;
+        this.entityClass = entityClass;
     }
     
     public Pagination() {
@@ -78,6 +87,7 @@ public class Pagination<T extends BaseEntity> extends PageBounds {
     }
     
     public Class<?> getCondClass(){
+        if(this.entityClass != null) return entityClass;
         if(this.cond != null)
             return cond.getClass();
         throw new CommonException(CommonExceptionCode.E999999);

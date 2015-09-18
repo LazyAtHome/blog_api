@@ -20,7 +20,6 @@
     <property name="suffix" value=".jsp" />
 </bean>
 <bean id="exceptionResolver" class="com.landaojia.mvc.HttpHandlerExceptionResolver" />
-
 <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 	<property name="messageConverters">
 		<list>
@@ -54,4 +53,12 @@
         </list>
     </property>
 </bean>
+
+<mvc:interceptors>
+	<mvc:interceptor>
+		<mvc:mapping path="/posts/**" />
+		<bean class="com.landaojia.blog.interceptor.UserLoginHandlerInterceptor" />
+	</mvc:interceptor>
+</mvc:interceptors>
+
 </beans>

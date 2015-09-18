@@ -22,7 +22,7 @@ public class CommonDaoImpl extends SqlSessionDaoSupport implements CommonDao {
         {
             put("select", ".select");
             put("remove", ".deleteById");
-            put("removeOnTondition", ".delete");
+            put("removeOnCondition", ".delete");
             put("create", ".insert");
             put("createWithId", ".insertWithId");
             put("createBatch", ".batchInsert");
@@ -37,7 +37,10 @@ public class CommonDaoImpl extends SqlSessionDaoSupport implements CommonDao {
     @Override
     public <T extends BaseEntity, ID extends Serializable> T findById(Class<T> clazz, ID id) {
         if (id == null || clazz == null) throw new CommonException(FAIL_OPERATION);
-        return getSqlSession().selectOne(clazz.getName() + statementMap.get("select"), id);
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("id", id);
+        paramMap.put("lock", false);
+        return getSqlSession().selectOne(clazz.getName() + statementMap.get("select"), paramMap);
     }
 
     @Override
@@ -53,7 +56,7 @@ public class CommonDaoImpl extends SqlSessionDaoSupport implements CommonDao {
         if (entity == null) throw new CommonException(FAIL_OPERATION);
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("cond", entity);
-        getSqlSession().update(entity.getClass().getName() + statementMap.get("removeOnTondition"), paramMap);
+        getSqlSession().update(entity.getClass().getName() + statementMap.get("removeOnCondition"), paramMap);
     }
 
     @Override

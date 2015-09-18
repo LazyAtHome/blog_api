@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- For assistance related to logback-translator or configuration -->
+<!-- files in general, please contact the logback user mailing list -->
+<!-- at http://www.qos.ch/mailman/listinfo/logback-user -->
+<!-- -->
+<!-- For professional support please see -->
+<!-- http://www.qos.ch/shop/products/professionalSupport -->
+<!-- -->
+<configuration debug="true">
+	<!-- <timestamp key="DATE_PATTERN" datePattern="yyyy-MM-dd HH:mm:ss"></timestamp>
+	<timestamp key="DATETIME_PATTERN" datePattern="yyyy-MM-dd-HH"></timestamp> -->
+	<contextName>blog-test</contextName>
+	<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
+	
+	<turboFilter class="ch.qos.logback.classic.turbo.DuplicateMessageFilter" />
+	<!-- dump status message on the console as they arrive -->
+	<statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener" />
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<Target>System.out</Target>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %c{1}:%L - %m%n</pattern>
+		</encoder>
+	</appender>
+
+	
+	<logger name="org.hibernate" level="ERROR"></logger>
+	<logger name="org.springframework" level="ERROR"></logger>
+
+	<logger name="org.quartz" level="ERROR" />
+	<logger name="org.springframework.transaction.interceptor" level="TRACE" />
+	<logger name="com.landaojia.test" level="info"></logger>
+	<root level="info">
+		<appender-ref ref="stdout" />
+	</root>
+</configuration>
