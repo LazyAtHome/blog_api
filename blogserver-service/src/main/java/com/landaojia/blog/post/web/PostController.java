@@ -1,18 +1,14 @@
 package com.landaojia.blog.post.web;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
-
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.landaojia.blog.common.result.JsonResult;
 import com.landaojia.blog.post.entity.Post;
 import com.landaojia.blog.post.service.PostService;
+import com.wordnik.swagger.annotations.Api;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+@Api(basePath = "/posts",value = "posts",description = "Post API",position = 2)
 @RestController
 @RequestMapping("/posts")
 public class PostController {

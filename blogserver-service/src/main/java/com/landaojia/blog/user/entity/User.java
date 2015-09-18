@@ -8,7 +8,6 @@ import com.landaojia.blog.common.dao.BaseEntity;
 public class User extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
-
     private String userName;//
 
     private String email;//

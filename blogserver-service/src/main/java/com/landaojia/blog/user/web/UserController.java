@@ -5,6 +5,7 @@ import com.landaojia.blog.common.result.JsonResult;
 import com.landaojia.blog.user.entity.User;
 import com.landaojia.blog.user.service.UserService;
 import com.landaojia.mvc.Current;
+import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Created by JUN on 15/9/11.
  */
+@Api(value = "users", description = "User API",basePath = "/users",position = 1)
 @RestController
 @RequestMapping("/users")
 public class UserController {
