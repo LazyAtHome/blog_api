@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.landaojia.blog.common.dao.CommonDao;
-import com.landaojia.blog.common.exception.CommonException;
-import com.landaojia.blog.common.exception.CommonExceptionCode;
 import com.landaojia.blog.common.result.JsonResult;
 import com.landaojia.blog.user.entity.User;
 import com.landaojia.blog.user.service.UserService;
@@ -35,12 +33,9 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiOperation(value = "用户登录", httpMethod = "POST", notes = "用户登录", response = JsonResult.class)
     public JsonResult login(@ApiParam(required = true) String userName, @ApiParam(required = true) String password, HttpSession session) {
-        if (session.getAttribute(Current.SESSION_LOGIN) == null) {
-            User user = userService.login(userName, password);
-            session.setAttribute(Current.SESSION_LOGIN, user.getId());
-            return JsonResult.success(user);
-        }
-        throw new CommonException(CommonExceptionCode.USER_IS_LOGINED);
+        User user = userService.login(userName, password);
+        session.setAttribute(Current.SESSION_LOGIN, user.getId());
+        return JsonResult.success(user);
     }
 
     @ResponseBody

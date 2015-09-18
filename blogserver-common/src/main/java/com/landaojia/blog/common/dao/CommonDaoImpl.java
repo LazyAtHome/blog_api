@@ -22,7 +22,7 @@ public class CommonDaoImpl extends SqlSessionDaoSupport implements CommonDao {
         {
             put("select", ".select");
             put("remove", ".deleteById");
-            put("removeOnTondition", ".delete");
+            put("removeOnCondition", ".delete");
             put("create", ".insert");
             put("createWithId", ".insertWithId");
             put("createBatch", ".batchInsert");
@@ -56,7 +56,7 @@ public class CommonDaoImpl extends SqlSessionDaoSupport implements CommonDao {
         if (entity == null) throw new CommonException(FAIL_OPERATION);
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("cond", entity);
-        getSqlSession().update(entity.getClass().getName() + statementMap.get("removeOnTondition"), paramMap);
+        getSqlSession().update(entity.getClass().getName() + statementMap.get("removeOnCondition"), paramMap);
     }
 
     @Override

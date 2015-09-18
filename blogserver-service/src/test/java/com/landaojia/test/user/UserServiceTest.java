@@ -61,14 +61,15 @@ public class UserServiceTest extends AbstractJunitContextTests {
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public void loginTest(){
         startSession();
-        userService.login("yanpengtest", "testtestyanpeng", session);
+        session.setAttribute(Current.SESSION_LOGIN, userService.login("yanpengtest", "testtestyanpeng").getId());
         System.out.println(session.getAttribute(Current.SESSION_LOGIN).toString());
     }
     
     @Test
     public void logoutTest(){
         loginTest();
-        userService.logout(session);
+        userService.logout((Long)session.getAttribute(Current.SESSION_LOGIN));
+        session.removeAttribute(Current.SESSION_LOGIN);
         endSession();
     }
     
