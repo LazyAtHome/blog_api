@@ -59,6 +59,7 @@ public class UserServiceImpl implements UserService {
         }
         //set accessToken
         user.setAccessToken(EncryptUtil.encrypt(new StringBuilder(user.getUserName()).append(" ").append(user.getId()).toString()));
+        user.setCryptedPassword(null);
         return user;
     }
 
