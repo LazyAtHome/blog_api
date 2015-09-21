@@ -13,7 +13,6 @@ import com.landaojia.blog.common.exception.CommonExceptionCode;
 import com.landaojia.blog.common.util.DateUtil;
 import com.landaojia.blog.common.util.EncryptUtil;
 import com.landaojia.blog.common.util.Strings;
-import com.landaojia.blog.common.validation.Validator;
 import com.landaojia.blog.user.dao.UserDao;
 import com.landaojia.blog.user.entity.User;
 import com.landaojia.blog.user.service.UserService;
@@ -29,14 +28,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private CommonDao commonDao;
-
+    
     @Transactional
     public void registerUser(User user) {
-        new Validator(user)
-        .forProperty("userName").notNull().notBlank().length(7, 20).hasNoChineseWord()
-        .forProperty("email").notNull().maxLength(100).isEmail().hasNoChineseWord().custom(commonDao.search(new User().setEmail(user.getEmail())).size() == 0, "该邮箱地址已被注册")
-        .forProperty("cryptedPasswordConfirm").notNull().notBlank().length(7, 20)
-        .forProperty("cryptedPassword").notNull().notBlank().length(7, 20).custom(user.getCryptedPasswordConfirm() == null ? false : user.getCryptedPassword().equals(user.getCryptedPasswordConfirm()), "两次输入密码不一致").check();
         if(commonDao.search(new User(user.getUserName())).size() > 0){
             throw new CommonException(CommonExceptionCode.USER_IS_EXISTS);
         } else {
@@ -63,6 +57,8 @@ public class UserServiceImpl implements UserService {
         if(!user.getCryptedPassword().equals(EncryptUtil.encrypt(password))){
             throw new CommonException(CommonExceptionCode.INCORRECT_PASSWORD);
         }
+        //set accessToken
+        user.setAccessToken(EncryptUtil.encrypt(new StringBuilder(user.getUserName()).append(" ").append(user.getId()).toString()));
         return user;
     }
 

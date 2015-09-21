@@ -41,8 +41,8 @@ public class HttpHandlerExceptionResolver implements HandlerExceptionResolver {
 				badRequestReason.put("error", ((CommonException) ex).getMessage());
 			} else {
 				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				ex.printStackTrace();
 			}
+			ex.printStackTrace();
 			//bad request
 			if (!response.isCommitted() && !badRequestReason.isEmpty()) {
 			    response.setContentType("application/json");

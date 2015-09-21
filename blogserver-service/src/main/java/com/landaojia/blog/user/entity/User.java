@@ -13,10 +13,10 @@ public class User extends BaseEntity {
     private String email;//
 
     private String cryptedPassword;//
-    
-    transient private String cryptedPasswordConfirm;
 
     private String role;//
+    
+    private String accessToken;//
 
     
     public User() {
@@ -78,17 +78,6 @@ public class User extends BaseEntity {
         this.cryptedPassword = cryptedPassword;
     }
 
-    
-    
-    public String getCryptedPasswordConfirm() {
-        return cryptedPasswordConfirm;
-    }
-
-    
-    public void setCryptedPasswordConfirm(String cryptedPasswordConfirm) {
-        this.cryptedPasswordConfirm = cryptedPasswordConfirm;
-    }
-
     /**
      * return
      */
@@ -101,5 +90,15 @@ public class User extends BaseEntity {
      */
     public void setRole(String role) {
         this.role = role;
+    }
+
+    
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 }

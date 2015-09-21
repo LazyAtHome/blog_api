@@ -386,5 +386,12 @@ public class EncryptUtil {
             iv[i] = buf[i + 8];
         }
     }
-   
+    public static void main(String[] args) throws Exception {
+        String msg = "lkasddad艾弗森的";
+        String encontent = encrypt(msg);
+        String decontent = decrypt(encontent);
+        System.out.println("明文是:" + msg);
+        System.out.println("加密后:" + encontent);
+        System.out.println("解密后:" + decontent);
+    }
 }
