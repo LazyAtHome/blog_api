@@ -3,10 +3,12 @@ package com.landaojia.mvc;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.base.Strings;
+import com.landaojia.blog.annotation.LoginIgnored;
 import com.landaojia.blog.common.exception.CommonException;
 import com.landaojia.blog.common.exception.CommonExceptionCode;
 import com.landaojia.blog.common.util.EncryptUtil;
@@ -32,6 +34,9 @@ public class TokenAuthInterceptor implements HandlerInterceptor {
                 inIgnore = true;
                 break;
             }
+        }
+        if (null != ((HandlerMethod) handler).getMethod().getAnnotation(LoginIgnored.class)) {
+            inIgnore = true;
         }
         // step2:if it's not in ignorePathes,we will check the accessToken in header
         if (!inIgnore) {

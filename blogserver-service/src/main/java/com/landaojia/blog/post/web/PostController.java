@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.landaojia.blog.annotation.LoginRequired;
+import com.landaojia.blog.annotation.LoginIgnored;
 import com.landaojia.blog.common.result.JsonResult;
 import com.landaojia.blog.post.entity.Post;
 import com.landaojia.blog.post.service.PostService;
@@ -21,14 +21,14 @@ public class PostController {
     @Resource
     private PostService postService;
 
-    @LoginRequired
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public JsonResult create(Post post) {
         this.postService.create(post);
         return JsonResult.success("ok");
     }
-
+    
+    @LoginIgnored
     @ResponseBody
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public JsonResult queryAll(@RequestParam(required = false, defaultValue = "1") Integer page,
@@ -36,13 +36,13 @@ public class PostController {
         return JsonResult.success(this.postService.queryAll(page, limit));
     }
 
+    @LoginIgnored
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public JsonResult queryById(@PathVariable("id") Long id) {
         return JsonResult.success(this.postService.queryById(id));
     }
 
-    @LoginRequired
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public JsonResult update(@PathVariable("id") Long id, Post post) {
@@ -50,7 +50,6 @@ public class PostController {
         return JsonResult.success("ok");
     }
 
-    @LoginRequired
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public JsonResult delete(@PathVariable("id") Long id) {
