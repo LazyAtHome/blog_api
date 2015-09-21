@@ -1,7 +1,5 @@
 package com.landaojia.blog.interceptor;
 
-import java.lang.reflect.Method;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,15 +8,13 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.landaojia.blog.annotation.LoginRequired;
+import com.landaojia.blog.annotation.LoginIgnored;
 import com.landaojia.blog.common.dao.CommonDao;
-import com.landaojia.blog.common.exception.CommonException;
-import com.landaojia.blog.common.exception.CommonExceptionCode;
 import com.landaojia.blog.threadlocal.UserThreadLocal;
 import com.landaojia.blog.user.entity.User;
 
 /***
- * check login and put user information into threadlocal
+ * get user info and put it into threadlocal
  * @author JiangXiaoYong
  *
  * 2015年9月16日 下午3:41:07
@@ -31,14 +27,8 @@ public class UserLoginHandlerInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
-        Method method = handlerMethod.getMethod();
-        LoginRequired annotation = method.getAnnotation(LoginRequired.class);
-        if (null != annotation) {
+        if (null == ((HandlerMethod) handler).getMethod().getAnnotation(LoginIgnored.class)) {
             Long userId = (Long) request.getAttribute("userId");
-            if (null == userId) {
-                throw new CommonException(CommonExceptionCode.USER_NOT_LOGIN);
-            }
             User user = this.commonDao.findById(User.class, userId);
             UserThreadLocal.set(user);
         }
