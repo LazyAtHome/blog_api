@@ -16,7 +16,6 @@ import com.landaojia.blog.common.exception.CommonException;
 import com.landaojia.blog.common.exception.CommonExceptionCode;
 import com.landaojia.blog.threadlocal.UserThreadLocal;
 import com.landaojia.blog.user.entity.User;
-import com.landaojia.mvc.Current;
 
 /***
  * check login and put user information into threadlocal
@@ -36,7 +35,7 @@ public class UserLoginHandlerInterceptor implements HandlerInterceptor {
         Method method = handlerMethod.getMethod();
         LoginRequired annotation = method.getAnnotation(LoginRequired.class);
         if (null != annotation) {
-            Long userId = (Long) request.getSession().getAttribute(Current.SESSION_LOGIN);
+            Long userId = (Long) request.getAttribute("userId");
             if (null == userId) {
                 throw new CommonException(CommonExceptionCode.USER_NOT_LOGIN);
             }
