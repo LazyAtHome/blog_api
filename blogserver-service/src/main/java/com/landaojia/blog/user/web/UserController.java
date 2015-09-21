@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.landaojia.blog.annotation.LoginIgnored;
 import com.landaojia.blog.common.dao.CommonDao;
 import com.landaojia.blog.common.result.JsonResult;
 import com.landaojia.blog.common.validation.Validator;
@@ -31,7 +32,8 @@ public class UserController {
 
     @Resource
     UserService userService;
-
+    
+    @LoginIgnored
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiOperation(value = "用户登录", httpMethod = "POST", notes = "用户登录", response = JsonResult.class)
@@ -47,7 +49,8 @@ public class UserController {
 //        userService.logout(0L);
         return JsonResult.success("ok");
     }
-
+    
+    @LoginIgnored
     @ResponseBody
     @RequestMapping(value = "/reg", method = RequestMethod.POST)
     @ApiOperation(value = "用户注册", httpMethod = "POST", notes = "用户注册", response = JsonResult.class)

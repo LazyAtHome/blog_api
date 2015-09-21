@@ -52,7 +52,6 @@ public class UserServiceTest extends AbstractJunitContextTests {
         User user = new User();
         user.setUserName("tommyhanks");
         user.setCryptedPassword("123456dasda");
-        user.setCryptedPasswordConfirm("123456dasda");
         user.setEmail("tom@gmail.com");
         userService.registerUser(user);
     }
