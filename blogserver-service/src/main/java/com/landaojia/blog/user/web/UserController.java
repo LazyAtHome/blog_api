@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.landaojia.blog.common.dao.CommonDao;
 import com.landaojia.blog.common.result.JsonResult;
+import com.landaojia.blog.common.validation.Validator;
 import com.landaojia.blog.user.entity.User;
 import com.landaojia.blog.user.service.UserService;
 import com.landaojia.mvc.Current;
@@ -32,9 +33,8 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiOperation(value = "用户登录", httpMethod = "POST", notes = "用户登录", response = JsonResult.class)
-    public JsonResult login(@ApiParam(required = true) String userName, @ApiParam(required = true) String password, HttpSession session) {
+    public JsonResult login(@ApiParam(required = true) String userName, @ApiParam(required = true) String password) {
         User user = userService.login(userName, password);
-        session.setAttribute(Current.SESSION_LOGIN, user.getId());
         return JsonResult.success(user);
     }
 
@@ -42,12 +42,7 @@ public class UserController {
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     @ApiOperation(value = "用户注销", httpMethod = "GET", notes = "用户注销", response = JsonResult.class)
     public JsonResult logout(HttpSession session) {
-        Long userId = (Long) session.getAttribute(Current.SESSION_LOGIN);
-        if (userId != null) {
-            // other logics executed in service layer;
-            session.removeAttribute(Current.SESSION_LOGIN);
-            userService.logout(userId);
-        }
+//        userService.logout(0L);
         return JsonResult.success("ok");
     }
 
@@ -55,6 +50,10 @@ public class UserController {
     @RequestMapping(value = "/reg", method = RequestMethod.POST)
     @ApiOperation(value = "用户注册", httpMethod = "POST", notes = "用户注册", response = JsonResult.class)
     public JsonResult register(@ApiParam(required = true) User user) {
+        new Validator(user)
+        .forProperty("userName").notNull().notBlank().length(7, 20).hasNoChineseWord()
+        .forProperty("email").notNull().maxLength(100).isEmail().hasNoChineseWord().custom(commonDao.search(new User().setEmail(user.getEmail())).size() == 0, "该邮箱地址已被注册")
+        .forProperty("cryptedPassword").notNull().notBlank().length(7, 20).hasNoChineseWord().check();
         userService.registerUser(user);
         return JsonResult.success("ok");
     }

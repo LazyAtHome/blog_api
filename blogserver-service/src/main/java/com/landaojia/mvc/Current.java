@@ -28,7 +28,7 @@ public class Current {
     }
     
     public User getCurrentUser(){
-        return commonDao.findById(User.class, userId);
+        return userId == null ? null:commonDao.findById(User.class, userId);
     }
     
 }

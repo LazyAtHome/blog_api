@@ -41,15 +41,14 @@
 <bean id="annotationMapper" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
     <property name="interceptors">
         <list>
-            <!--<bean id="loginInterceptor" class="com.landaojia.rsserver.base.interceptor.OperInterceptor">-->
-            	<!--<property name="notInterceptList">-->
-            		<!--<list>-->
-            			<!--<value>oper/login</value>-->
-            			<!--<value>sms/smsForUpdatePassword</value>-->
-						<!--<value>upgrade/checkUpgrade</value>-->
-            		<!--</list>-->
-            	<!--</property>-->
-            <!--</bean>-->
+            <bean id="tokenAuthInterceptor" class="com.landaojia.mvc.TokenAuthInterceptor">
+            	<property name="ignorePathes">
+            		<list>
+            			<value>/login</value>
+            			<value>/reg</value>
+            		</list>
+            	</property>
+            </bean>
         </list>
     </property>
 </bean>
