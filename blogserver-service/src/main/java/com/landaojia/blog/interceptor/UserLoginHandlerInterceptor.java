@@ -14,11 +14,9 @@ import com.landaojia.blog.common.dao.CommonDao;
 import com.landaojia.blog.common.exception.CommonException;
 import com.landaojia.blog.common.exception.CommonExceptionCode;
 import com.landaojia.blog.common.util.EncryptUtil;
-import com.landaojia.blog.threadlocal.UserThreadLocal;
-import com.landaojia.blog.user.entity.User;
 
 /***
- * get user info and put it into threadlocal
+ * check login and get user id
  * @author JiangXiaoYong
  *
  * 2015年9月16日 下午3:41:07
@@ -34,16 +32,15 @@ public class UserLoginHandlerInterceptor implements HandlerInterceptor {
         if (null == ((HandlerMethod) handler).getMethod().getAnnotation(LoginIgnored.class)) {
             String accessToken = request.getHeader("accessToken");
             if (Strings.isNullOrEmpty(accessToken)) throw new CommonException(CommonExceptionCode.USER_NOT_LOGIN);
-            User user = null;
+            Long userId = null;
             try {
                 String[] userInfo = EncryptUtil.decrypt(accessToken).split(" ");
-                Long userId = Long.valueOf(userInfo[userInfo.length - 1]);
-                user = this.commonDao.findById(User.class, userId);
+                userId = Long.valueOf(userInfo[userInfo.length - 1]);
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new CommonException(CommonExceptionCode.USER_NOT_EXISTS);
             }
-            UserThreadLocal.set(user);
+            request.setAttribute("userId", userId);
         }
         return true;
     }

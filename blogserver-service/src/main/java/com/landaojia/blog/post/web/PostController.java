@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.landaojia.blog.annotation.LoginIgnored;
 import com.landaojia.blog.common.result.JsonResult;
+import com.landaojia.blog.common.validation.Validator;
 import com.landaojia.blog.post.entity.Post;
 import com.landaojia.blog.post.service.PostService;
+import com.landaojia.mvc.Current;
 
 @RestController
 @RequestMapping("/posts")
@@ -23,8 +25,9 @@ public class PostController {
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
-    public JsonResult create(Post post) {
-        this.postService.create(post);
+    public JsonResult create(Post post, Current current) {
+        validate(post);
+        this.postService.create(post, current.getCurrentUser());
         return JsonResult.success("ok");
     }
     
@@ -45,8 +48,9 @@ public class PostController {
 
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public JsonResult update(@PathVariable("id") Long id, Post post) {
-        this.postService.update(id, post);
+    public JsonResult update(@PathVariable("id") Long id, Post post, Current current) {
+        validate(post);
+        this.postService.update(id, post, current.getCurrentUser());
         return JsonResult.success("ok");
     }
 
@@ -56,5 +60,12 @@ public class PostController {
         this.postService.delete(id);
         return JsonResult.success("ok");
     }
-
+    
+    private void validate(Post post) {
+        Validator v = new Validator(post);
+        v.forProperty("title").notNull().notBlank().maxLength(50);
+        v.forProperty("content").notNull().notBlank().maxLength(500);
+        v.check();
+    }
+    
 }

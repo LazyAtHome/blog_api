@@ -8,7 +8,6 @@ import org.junit.Test;
 import com.landaojia.blog.common.dao.CommonDao;
 import com.landaojia.blog.post.entity.Post;
 import com.landaojia.blog.post.service.PostService;
-import com.landaojia.blog.threadlocal.UserThreadLocal;
 import com.landaojia.blog.user.entity.User;
 import com.landaojia.test.AbstractJunitContextTests;
 
@@ -20,10 +19,11 @@ public class PostServiceTest extends AbstractJunitContextTests {
     @Resource
     private CommonDao commonDao;
     
+    User user;
+    
     @Before
     public void setUp(){
-        User user = this.commonDao.findById(User.class, 1L);
-        UserThreadLocal.set(user);
+        user = this.commonDao.findById(User.class, 1L);
     }
     
     @Test
@@ -31,7 +31,7 @@ public class PostServiceTest extends AbstractJunitContextTests {
         Post post = new Post();
         post.setTitle("test");
         post.setContent("test");
-        this.postService.create(post);
+        this.postService.create(post, user);
     }
 
     @Test
@@ -49,7 +49,7 @@ public class PostServiceTest extends AbstractJunitContextTests {
         Post post = new Post();
         post.setTitle("test");
         post.setContent("test");
-        this.postService.update(1L, post);
+        this.postService.update(1L, post, user);
     }
 
     @Test
