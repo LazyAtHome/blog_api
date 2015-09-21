@@ -15,11 +15,9 @@ import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.landaojia.blog.common.dao.CommonDao;
 import com.landaojia.blog.common.exception.CommonException;
 import com.landaojia.blog.common.exception.CommonExceptionCode;
-import com.landaojia.blog.common.validation.Validator;
 import com.landaojia.blog.post.dao.PostDao;
 import com.landaojia.blog.post.entity.Post;
 import com.landaojia.blog.post.service.PostService;
-import com.landaojia.blog.threadlocal.UserThreadLocal;
 import com.landaojia.blog.user.entity.User;
 
 @Service
@@ -33,9 +31,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public void create(Post post) {
-        validate(post);
-        User user = UserThreadLocal.get();
+    public void create(Post post, User user) {
         post.setUserId(user.getId());
         post.setViewCount(0L);
         post.setCreatedBy(user.getEmail());
@@ -59,9 +55,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public void update(Long id, Post post) {
-        validate(post);
-        User user = UserThreadLocal.get();
+    public void update(Long id, Post post, User user) {
         Post oldPost = this.commonDao.findById(Post.class, id);
         if(null == oldPost) {
             throw new CommonException(CommonExceptionCode.POST_NOT_EXISTS);
@@ -76,13 +70,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public void delete(Long id) {
         this.commonDao.removeById(Post.class, id);
-    }
-
-    private void validate(Post post) {
-        Validator v = new Validator(post);
-        v.forProperty("title").notNull().notBlank().maxLength(50);
-        v.forProperty("content").notNull().notBlank().maxLength(500);
-        v.check();
     }
 
 }
