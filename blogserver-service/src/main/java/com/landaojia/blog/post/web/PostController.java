@@ -3,6 +3,7 @@ package com.landaojia.blog.post.web;
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +26,7 @@ public class PostController {
 
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
-    public JsonResult create(Post post, Current current) {
+    public JsonResult create(@RequestBody Post post, Current current) {
         validate(post);
         this.postService.create(post, current.getCurrentUser());
         return JsonResult.success("ok");
@@ -48,7 +49,7 @@ public class PostController {
 
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public JsonResult update(@PathVariable("id") Long id, Post post, Current current) {
+    public JsonResult update(@PathVariable("id") Long id, @RequestBody Post post, Current current) {
         validate(post);
         this.postService.update(id, post, current.getCurrentUser());
         return JsonResult.success("ok");

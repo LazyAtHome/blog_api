@@ -3,6 +3,7 @@ package com.landaojia.blog.user.web;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,8 +38,8 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiOperation(value = "用户登录", httpMethod = "POST", notes = "用户登录", response = JsonResult.class)
-    public JsonResult login(@ApiParam(required = true) String userName, @ApiParam(required = true) String password) {
-        User user = userService.login(userName, password);
+    public JsonResult login(@ApiParam(required = true) @RequestBody User u) {
+        User user = userService.login(u.getUserName(), u.getPassword());
         return JsonResult.success(user);
     }
 
@@ -54,7 +55,7 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/reg", method = RequestMethod.POST)
     @ApiOperation(value = "用户注册", httpMethod = "POST", notes = "用户注册", response = JsonResult.class)
-    public JsonResult register(@ApiParam(required = true) User user) {
+    public JsonResult register(@ApiParam(required = true) @RequestBody User user) {
         new Validator(user)
         .forProperty("userName").notNull().notBlank().length(7, 20).hasNoChineseWord()
         .forProperty("email").notNull().maxLength(100).isEmail().hasNoChineseWord().custom(commonDao.search(new User().setEmail(user.getEmail())).size() == 0, "该邮箱地址已被注册")

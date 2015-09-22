@@ -9,7 +9,9 @@ public class User extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
     private String userName;//
-
+    
+    private String password;
+    
     private String email;//
 
     private String cryptedPassword;//
@@ -100,5 +102,13 @@ public class User extends BaseEntity {
     
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
