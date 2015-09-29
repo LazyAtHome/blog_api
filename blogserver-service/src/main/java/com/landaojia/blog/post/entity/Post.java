@@ -9,7 +9,7 @@ import com.landaojia.blog.common.dao.BaseEntity;
  */
 public class Post extends BaseEntity {
     private static final long serialVersionUID = 1L;
-
+    
     private String title;//
 
     private String content;//
@@ -17,7 +17,9 @@ public class Post extends BaseEntity {
     private Long userId;// references to id of b_user
 
     private Long viewCount;//
-
+    
+    private Boolean isPrivate;
+    
     /**
      * return
      */
@@ -76,4 +78,13 @@ public class Post extends BaseEntity {
     public void setViewCount(Long viewCount) {
         this.viewCount = viewCount;
     }
+
+    public Boolean getIsPrivate() {
+        return isPrivate;
+    }
+
+    public void setIsPrivate(Boolean isPrivate) {
+        this.isPrivate = isPrivate;
+    }
+
 }

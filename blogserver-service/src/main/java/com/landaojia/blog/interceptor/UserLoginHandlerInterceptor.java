@@ -17,21 +17,25 @@ import com.landaojia.blog.common.util.EncryptUtil;
 
 /***
  * check login and get user id
+ * 
  * @author JiangXiaoYong
  *
- * 2015年9月16日 下午3:41:07
+ *         2015年9月16日 下午3:41:07
  */
 public class UserLoginHandlerInterceptor implements HandlerInterceptor {
-    
+
     @Resource
     private CommonDao commonDao;
-    
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        if (null == ((HandlerMethod) handler).getMethod().getAnnotation(LoginIgnored.class)) {
-            String accessToken = request.getHeader("accessToken");
-            if (Strings.isNullOrEmpty(accessToken)) throw new CommonException(CommonExceptionCode.USER_NOT_LOGIN);
+        String accessToken = request.getHeader("accessToken");
+        if (Strings.isNullOrEmpty(accessToken)) {
+            if (null == ((HandlerMethod) handler).getMethod().getAnnotation(LoginIgnored.class)) {
+                throw new CommonException(CommonExceptionCode.USER_NOT_LOGIN);
+            }
+        } else {
             Long userId = null;
             try {
                 String[] userInfo = EncryptUtil.decrypt(accessToken).split(" ");

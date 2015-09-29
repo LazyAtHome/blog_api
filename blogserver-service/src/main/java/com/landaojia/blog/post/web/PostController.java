@@ -1,6 +1,7 @@
 package com.landaojia.blog.post.web;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.landaojia.blog.annotation.LoginIgnored;
 import com.landaojia.blog.common.result.JsonResult;
+import com.landaojia.blog.common.util.HttpUtil;
 import com.landaojia.blog.common.validation.Validator;
 import com.landaojia.blog.post.entity.Post;
 import com.landaojia.blog.post.service.PostService;
@@ -27,9 +29,21 @@ public class PostController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public JsonResult create(@RequestBody Post post, Current current) {
-        validate(post);
+        Validator v = new Validator(post);
+        v.forProperty("title").notNull().notBlank().maxLength(50);
+        v.forProperty("content").notNull().notBlank().maxLength(4000);
+        v.check();
         this.postService.create(post, current.getCurrentUser());
         return JsonResult.success("ok");
+    }
+    
+    @LoginIgnored
+    @ResponseBody
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public JsonResult queryById(@PathVariable("id") Long id, HttpServletRequest request, Current current) {
+        Post post = this.postService.queryById(id, current.getCurrentUser());
+        this.postService.addViewCount(HttpUtil.getRequestIp(request), id);
+        return JsonResult.success(post);
     }
     
     @LoginIgnored
@@ -39,18 +53,21 @@ public class PostController {
             @RequestParam(required = false, defaultValue = "10") Integer limit) {
         return JsonResult.success(this.postService.queryAll(page, limit));
     }
-
-    @LoginIgnored
+    
     @ResponseBody
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public JsonResult queryById(@PathVariable("id") Long id) {
-        return JsonResult.success(this.postService.queryById(id));
+    @RequestMapping(value = "/my", method = RequestMethod.GET)
+    public JsonResult queryByUserId(@RequestParam(required = false, defaultValue = "1") Integer page,
+            @RequestParam(required = false, defaultValue = "10") Integer limit, Current current) {
+        return JsonResult.success(this.postService.queryByUserId(page, limit, current.getCurrentUser()));
     }
 
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public JsonResult update(@PathVariable("id") Long id, @RequestBody Post post, Current current) {
-        validate(post);
+        Validator v = new Validator(post);
+        v.forProperty("title").maxLength(50);
+        v.forProperty("content").maxLength(4000);
+        v.check();
         this.postService.update(id, post, current.getCurrentUser());
         return JsonResult.success("ok");
     }
@@ -60,13 +77,6 @@ public class PostController {
     public JsonResult delete(@PathVariable("id") Long id) {
         this.postService.delete(id);
         return JsonResult.success("ok");
-    }
-    
-    private void validate(Post post) {
-        Validator v = new Validator(post);
-        v.forProperty("title").notNull().notBlank().maxLength(50);
-        v.forProperty("content").notNull().notBlank().maxLength(500);
-        v.check();
     }
     
 }

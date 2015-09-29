@@ -9,4 +9,8 @@ public interface PostDao {
 
     public List<Post> searchByPage(Post post, PageBounds pageBounds);
 
+    public Post selectOne(Long id, Long userId);
+
+    public void addViewCount(Long id);
+
 }

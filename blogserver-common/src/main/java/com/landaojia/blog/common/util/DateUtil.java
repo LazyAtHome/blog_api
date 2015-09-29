@@ -174,4 +174,14 @@ public class DateUtil {
         long ei = el - sl;
         return (int) (ei / (1000 * 60 * 60 * 24));
     }
+    
+    public static int getRemainingSeconds() {
+        Calendar cal = Calendar.getInstance(); 
+        cal.set(Calendar.HOUR_OF_DAY, 24);
+        cal.set(Calendar.SECOND, 0); 
+        cal.set(Calendar.MINUTE, 0); 
+        cal.set(Calendar.MILLISECOND, 0); 
+        return (int) ((cal.getTimeInMillis() - System.currentTimeMillis())/1000);
+    }
+    
 }
