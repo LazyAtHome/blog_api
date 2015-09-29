@@ -41,7 +41,7 @@ public class PostServiceTest extends AbstractJunitContextTests {
 
     @Test
     public void testQueryById() {
-        System.out.println(this.postService.queryById(1L));
+        System.out.println(this.postService.queryById(1L, user));
     }
 
     @Test

@@ -1,172 +1,196 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.landaojia.blog.post.entity.Post">
-    <resultMap type="com.landaojia.blog.post.entity.Post" id="result"/>
-    <sql id="select_all_cols">
-                b_post.ID,
-                b_post.title as title,
-                b_post.content as content,
-                b_post.user_id as userId,
-                b_post.view_count as viewCount,
-                b_post.CREATED_DATE as createdDate,
-        b_post.UPDATED_DATE as updatedDate,
-        b_post.CREATED_BY as createdBy,
-        b_post.UPDATED_BY as updatedBy,
-        b_post.VERSION
-    </sql>
-    <sql id="insert_all_cols">
-                b_post.title,
-                b_post.content,
-                b_post.user_id,
-                b_post.view_count,
-                b_post.DELETED_FLAG,
-        b_post.CREATED_DATE,
-        b_post.UPDATED_DATE,
-        b_post.CREATED_BY,
-        b_post.UPDATED_BY,
-        b_post.VERSION
-    </sql>
-    <sql id="where_all">
-        WHERE DELETED_FLAG=0
-        <if test="cond.id != null">
-            AND b_post.id = #{cond.id}
-        </if>
-                <if test="cond.title != null">
-            AND b_post.title = #{cond.title}
-        </if>
-                        <if test="cond.content != null">
-            AND b_post.content = #{cond.content}
-        </if>
-                        <if test="cond.userId != null">
-            AND b_post.user_id = #{cond.userId}
-        </if>
-                        <if test="cond.viewCount != null">
-            AND b_post.view_count = #{cond.viewCount}
-        </if>
-                        <if test="cond.version != null">
-            AND b_post.version = #{cond.version}
-        </if>
-        <if test="cond.ids != null">
-            and b_post.id in
-            <foreach item="item" index="index" collection="cond.ids" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </if>
-        <if test="cond.createdDateB != null">
+	<resultMap type="com.landaojia.blog.post.entity.Post" id="result" />
+	<sql id="select_all_cols">
+		b_post.ID,
+		b_post.title as title,
+		b_post.content as content,
+		b_post.user_id as userId,
+		b_post.view_count as viewCount,
+		b_post.is_private as isPrivate,
+		b_post.CREATED_DATE as createdDate,
+		b_post.UPDATED_DATE as updatedDate,
+		b_post.CREATED_BY as createdBy,
+		b_post.UPDATED_BY as updatedBy,
+		b_post.VERSION
+	</sql>
+	<sql id="insert_all_cols">
+		b_post.title,
+		b_post.content,
+		b_post.user_id,
+		b_post.view_count,
+		b_post.IS_PRIVATE,
+		b_post.DELETED_FLAG,
+		b_post.CREATED_DATE,
+		b_post.UPDATED_DATE,
+		b_post.CREATED_BY,
+		b_post.UPDATED_BY,
+		b_post.VERSION
+	</sql>
+	<sql id="where_all">
+		WHERE DELETED_FLAG=0
+		<if test="cond.id != null">
+			AND b_post.id = #{cond.id}
+		</if>
+		<if test="cond.title != null">
+			AND b_post.title = #{cond.title}
+		</if>
+		<if test="cond.content != null">
+			AND b_post.content = #{cond.content}
+		</if>
+		<if test="cond.userId != null">
+			AND b_post.user_id = #{cond.userId}
+		</if>
+		<if test="cond.userId == null">
+			AND b_post.IS_PRIVATE=0
+		</if>
+		<if test="cond.viewCount != null">
+			AND b_post.view_count = #{cond.viewCount}
+		</if>
+		<if test="cond.version != null">
+			AND b_post.version = #{cond.version}
+		</if>
+		<if test="cond.ids != null">
+			and b_post.id in
+			<foreach item="item" index="index" collection="cond.ids" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="cond.createdDateB != null">
             <![CDATA[
-			AND b_post.CREATED_DATE >= #{cond.createdDateB}
-		]]>
-        </if>
-        <if test="cond.createdDateE != null">
+				AND b_post.CREATED_DATE >= #{cond.createdDateB}
+			]]>
+		</if>
+		<if test="cond.createdDateE != null">
             <![CDATA[
-			AND b_post.CREATED_DATE <= #{cond.createdDateE}
-		]]>
-        </if>
-        <if test="cond.updatedDateB != null">
+				AND b_post.CREATED_DATE <= #{cond.createdDateE}
+			]]>
+		</if>
+		<if test="cond.updatedDateB != null">
             <![CDATA[
-			AND b_post.UPDATED_DATE >= #{cond.updatedDateB}
-		]]>
-        </if>
-        <if test="cond.updatedDateE != null">
+				AND b_post.UPDATED_DATE >= #{cond.updatedDateB}
+			]]>
+		</if>
+		<if test="cond.updatedDateE != null">
             <![CDATA[
-			AND b_post.UPDATED_DATE <= #{cond.updatedDateE}
-		]]>
-        </if>
-    </sql>
-    <select id="select" resultMap="result">
-        select <include refid="select_all_cols"/>
-        FROM b_post
-        WHERE DELETED_FLAG=0 and b_post.ID=#{id}
-        <if test="lock">
-            FOR UPDATE
-        </if>
-    </select>
-    <select id="query" resultMap="result">
-        select <include refid="select_all_cols"/>
-        FROM b_post
-        <include refid="where_all"/>
-        <if test="start != null">
-            order by b_post.CREATED_DATE desc
-            limit #{start},#{size}
-        </if>
-    </select>
-    <select id="count" resultType="java.lang.Long">
-        select count(0)
-        FROM b_post
-        <include refid="where_all"/>
-    </select>
-    <select id="sum" resultType="java.math.BigDecimal">
-        select sum(${col})
-        FROM b_post
-        <include refid="where_all"/>
-    </select>
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id" >
-        INSERT INTO b_post(<include refid="insert_all_cols"/>)
-        VALUES
-        (
-                #{title},
-                #{content},
-                #{userId},
-                #{viewCount},
-                0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
-        )
-    </insert>
-    <insert id="batchInsert">
-        INSERT INTO b_post(<include refid="insert_all_cols"/>)
-        VALUES
-        <foreach item="item" index="index" collection="list" open="" separator="," close="">
-            (
-                        #{item.title},
-                        #{item.content},
-                        #{item.userId},
-                        #{item.viewCount},
-                        0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
-            )
-        </foreach>
-    </insert>
-    <insert id="insertWithId">
-        INSERT INTO b_post(ID,<include refid="insert_all_cols"/>)
-        VALUES
-        (#{id},
-                #{title},
-                #{content},
-                #{userId},
-                #{viewCount},
-                0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
-        )
-    </insert>
-    <insert id="batchInsertWithId">
-        INSERT INTO b_post(ID,<include refid="insert_all_cols"/>)
-        VALUES
-        <foreach item="item" index="index" collection="list" open="" separator="," close="">
-            (#{item.id},
-                        #{item.title},
-                        #{item.content},
-                        #{item.userId},
-                        #{item.viewCount},
-                        0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
-            )
-        </foreach>
-    </insert>
-    <update id="update">
-        update b_post
-        <set>
-                        title = #{title},
-                        content = #{content},
-                        user_id = #{userId},
-                        view_count = #{viewCount},
-                        id = #{id},
-            version = version + 1,
-            UPDATED_DATE = current_timestamp(),
-            UPDATED_BY=#{updatedBy}
-        </set>
-        where b_post.id = #{id} and b_post.version = #{version}
-    </update>
-    <delete id="delete">
-        update b_post set DELETED_FLAG=1
-        <include refid="where_all"/>
-    </delete>
-    <delete id="deleteById">
-        update b_post set DELETED_FLAG=1 where b_post.id = #{id}
-    </delete>
+				AND b_post.UPDATED_DATE <= #{cond.updatedDateE}
+			]]>
+		</if>
+	</sql>
+	<select id="select" resultMap="result">
+		select
+		<include refid="select_all_cols" />
+		FROM b_post
+		WHERE DELETED_FLAG=0 AND
+		<if test="userId != null">
+			b_post.USER_ID = #{userId}
+		</if>
+		<if test="userId == null">
+			b_post.IS_PRIVATE=0
+		</if>
+		AND b_post.ID=#{id}
+	</select>
+	<select id="query" resultMap="result">
+		select
+		<include refid="select_all_cols" />
+		FROM b_post
+		<include refid="where_all" />
+		<if test="start != null">
+			order by b_post.CREATED_DATE desc
+			limit #{start},#{size}
+		</if>
+	</select>
+	<select id="count" resultType="java.lang.Long">
+		select count(0)
+		FROM b_post
+		<include refid="where_all" />
+	</select>
+	<select id="sum" resultType="java.math.BigDecimal">
+		select sum(${col})
+		FROM b_post
+		<include refid="where_all" />
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO b_post(
+		<include refid="insert_all_cols" />
+		)
+		VALUES
+		(
+		#{title},
+		#{content},
+		#{userId},
+		#{viewCount},
+		#{isPrivate},0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
+		)
+	</insert>
+	<insert id="batchInsert">
+		INSERT INTO b_post(
+		<include refid="insert_all_cols" />
+		)
+		VALUES
+		<foreach item="item" index="index" collection="list" open=""
+			separator="," close="">
+			(
+			#{item.title},
+			#{item.content},
+			#{item.userId},
+			#{item.viewCount},
+			#{isPrivate},0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
+			)
+		</foreach>
+	</insert>
+	<insert id="insertWithId">
+		INSERT INTO b_post(ID,
+		<include refid="insert_all_cols" />
+		)
+		VALUES
+		(#{id},
+		#{title},
+		#{content},
+		#{userId},
+		#{viewCount},
+		#{isPrivate},0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
+		)
+	</insert>
+	<insert id="batchInsertWithId">
+		INSERT INTO b_post(ID,
+		<include refid="insert_all_cols" />
+		)
+		VALUES
+		<foreach item="item" index="index" collection="list" open="" separator="," close="">
+			(#{item.id},
+			#{item.title},
+			#{item.content},
+			#{item.userId},
+			#{item.viewCount},
+			#{isPrivate},0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
+			)
+		</foreach>
+	</insert>
+	<update id="update">
+		update b_post
+		<set>
+			title = #{title},
+			content = #{content},
+			user_id = #{userId},
+			view_count = #{viewCount},
+			is_private = #{isPrivate},
+			id = #{id},
+			version = version + 1,
+			UPDATED_DATE = current_timestamp(),
+			UPDATED_BY = #{updatedBy}
+		</set>
+		where b_post.id = #{id} and b_post.version = #{version}
+	</update>
+	<delete id="delete">
+		update b_post set DELETED_FLAG=1
+		<include refid="where_all" />
+	</delete>
+	<delete id="deleteById">
+		update b_post set DELETED_FLAG=1 where b_post.id = #{id}
+	</delete>
+	<update id="addViewCount">
+		update b_post set view_count = view_count + 1 where b_post.id = #{id}
+	</update>
 </mapper>

@@ -9,12 +9,16 @@ public interface PostService {
 
     public void create(Post post, User user);
 
+    public Post queryById(Long id, User user);
+
     public Map<String, Object> queryAll(Integer page, Integer limit);
 
-    public Post queryById(Long id);
+    public Map<String, Object> queryByUserId(Integer page, Integer limit, User user);
 
     public void update(Long id, Post post, User user);
 
     public void delete(Long id);
+
+    public void addViewCount(String ip, Long id);
 
 }
