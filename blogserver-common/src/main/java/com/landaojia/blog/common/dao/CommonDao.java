@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
-
 /**
  * It is used to integrate all of the basic CRUD operations
  * 

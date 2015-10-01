@@ -1,6 +1,7 @@
 package com.landaojia.mvc;
 
 import com.landaojia.blog.common.dao.CommonDao;
+import com.landaojia.blog.role.UserRole;
 import com.landaojia.blog.user.dao.UserDao;
 import com.landaojia.blog.user.entity.User;
 
@@ -31,4 +32,10 @@ public class Current {
         return userId == null ? null:commonDao.findById(User.class, userId);
     }
     
+    public UserRole getCurrentUserRole(){
+       User user = userId == null ? null : commonDao.findById(User.class, userId);
+       if(user != null)
+          return UserRole.getRole(user.getRole());
+       return null;  
+    }
 }
