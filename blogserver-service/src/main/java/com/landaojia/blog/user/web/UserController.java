@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.landaojia.blog.annotation.LoginIgnored;
 import com.landaojia.blog.common.dao.CommonDao;
 import com.landaojia.blog.common.result.JsonResult;
 import com.landaojia.blog.common.validation.Validator;
+import com.landaojia.blog.role.Authorization;
 import com.landaojia.blog.user.entity.User;
 import com.landaojia.blog.user.service.UserService;
 import com.landaojia.mvc.Current;
@@ -34,15 +34,17 @@ public class UserController {
     @Resource
     UserService userService;
     
-    @LoginIgnored
+    @Authorization(ignoreCheck = true)
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiOperation(value = "用户登录", httpMethod = "POST", notes = "用户登录", response = JsonResult.class)
-    public JsonResult login(@ApiParam(required = true) @RequestBody User u) {
-        User user = userService.login(u.getUserName(), u.getPassword());
+    
+    public JsonResult login(@ApiParam(required = true) String userName, @ApiParam(required = true) String password) {
+        User user = userService.login(userName, password);
         return JsonResult.success(user);
     }
 
+    @Authorization
     @ResponseBody
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     @ApiOperation(value = "用户注销", httpMethod = "GET", notes = "用户注销", response = JsonResult.class)
@@ -51,7 +53,7 @@ public class UserController {
         return JsonResult.success("ok");
     }
     
-    @LoginIgnored
+    @Authorization(ignoreCheck = true)
     @ResponseBody
     @RequestMapping(value = "/reg", method = RequestMethod.POST)
     @ApiOperation(value = "用户注册", httpMethod = "POST", notes = "用户注册", response = JsonResult.class)
@@ -64,10 +66,13 @@ public class UserController {
         return JsonResult.success("ok");
     }
 
+    @Authorization
     @ResponseBody
     @RequestMapping(value = "/current", method = RequestMethod.GET)
     @ApiOperation(value = "获取当前用户信息", httpMethod = "GET", notes = "获取当前用户信息", response = JsonResult.class)
     public JsonResult current(@ApiParam(required = true) Current current) {
-        return JsonResult.success(current.getCurrentUser());
+        User user = current.getCurrentUser();
+        user.setCryptedPassword("");
+        return JsonResult.success(user);
     }
 }
