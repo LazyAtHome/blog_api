@@ -27,7 +27,7 @@ public class PostController {
     @Resource
     private PostService postService;
 
-    @Authorization(role = { UserRole.EDITOR })
+    @Authorization(role = { UserRole.EDITOR, UserRole.ADMIN })
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public JsonResult create(@RequestBody Post post, Current current) {
@@ -39,7 +39,6 @@ public class PostController {
         return JsonResult.success("ok");
     }
 
-    @Authorization(ignoreCheck = true)
     @ResponseBody
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public JsonResult queryById(@PathVariable("id") Long id, HttpServletRequest request, Current current) {
@@ -48,7 +47,6 @@ public class PostController {
         return JsonResult.success(post);
     }
 
-    @Authorization(ignoreCheck = true)
     @ResponseBody
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public JsonResult queryAll(@RequestParam(required = false, defaultValue = "1") Integer page, @RequestParam(required = false, defaultValue = "10") Integer limit) {

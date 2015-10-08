@@ -13,12 +13,14 @@ import com.landaojia.blog.post.entity.Post;
 
 @Repository
 public class PostDaoImpl extends BaseDao implements PostDao {
-    
+
+    private static final String NAME_SPACE = Post.class.getName();
+
     @Override
     public List<Post> searchByPage(Post post, PageBounds pageBounds) {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("cond", post);
-        return getSqlSession().selectList("com.landaojia.blog.post.entity.Post.query", paramMap, pageBounds);
+        return getSqlSession().selectList(NAME_SPACE + ".query", paramMap, pageBounds);
     }
 
     @Override
@@ -26,12 +28,12 @@ public class PostDaoImpl extends BaseDao implements PostDao {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("id", id);
         paramMap.put("userId", userId);
-        return getSqlSession().selectOne("com.landaojia.blog.post.entity.Post.select", paramMap);
+        return getSqlSession().selectOne(NAME_SPACE + ".select", paramMap);
     }
 
     @Override
     public void addViewCount(Long id) {
-        getSqlSession().update("com.landaojia.blog.post.entity.Post.addViewCount", id);
+        getSqlSession().update(NAME_SPACE + ".addViewCount", id);
     }
 
 }

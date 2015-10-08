@@ -29,35 +29,40 @@ public class UserLoginHandlerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Authorization authorization = ((HandlerMethod) handler).getMethodAnnotation(Authorization.class);
-        // if the annotation not exist or the value of property named ignoreCheck of this annotation is true, we should
-        // pass the request;
-        if (authorization == null || authorization.ignoreCheck()) return true;
         String accessToken = request.getHeader("accessToken");
-        if (Strings.isNullOrEmpty(accessToken)) throw new CommonException(CommonExceptionCode.USER_NOT_LOGIN);
-        // obtain the userId from user's access token
-        Long userId = null;
-        try {
-            String[] userInfo = EncryptUtil.decrypt(accessToken).split(" ");
-            userId = Long.valueOf(userInfo[userInfo.length - 1]);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new CommonException(CommonExceptionCode.USER_NOT_EXISTS);
-        }
-        User user = commonDao.findById(User.class, userId);
-        if (user == null) throw new CommonException(CommonExceptionCode.USER_NOT_EXISTS);
-        UserRole[] roles = authorization.role();
-        // if the size of role equals 0 ,pass the request
-        if (roles.length == 0) return true;
-        // check the role of user ,whether which is in role list of this method
-        UserRole userRole = UserRole.getRole(user.getRole());
-        for (UserRole role : roles) {
-            if (role.equals(userRole)) {
-                request.setAttribute("userId", userId);
-                return true;
+        Authorization authorization = ((HandlerMethod) handler).getMethodAnnotation(Authorization.class);
+        if (Strings.isNullOrEmpty(accessToken)) {
+            if (null != authorization) {
+                throw new CommonException(CommonExceptionCode.USER_NOT_LOGIN);
+            }
+        } else {
+            // obtain the userId from user's access token
+            Long userId = null;
+            User user = null;
+            try {
+                String[] userInfo = EncryptUtil.decrypt(accessToken).split(" ");
+                user = this.commonDao.findById(User.class, Long.valueOf(userInfo[userInfo.length - 1]));
+                userId = user.getId();
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new CommonException(CommonExceptionCode.USER_NOT_EXISTS);
+            }
+            request.setAttribute("userId", userId);
+            // check the role of user ,whether which is in role list of this method
+            if (null != authorization) {
+                UserRole[] roles = authorization.role();
+                if (roles.length != 0) {
+                    UserRole userRole = UserRole.getRole(user.getRole());
+                    for (UserRole role : roles) {
+                        if (role.equals(userRole)) {
+                            return true;
+                        }
+                    }
+                    throw new CommonException(CommonExceptionCode.POST_NO_AUTH);
+                }
             }
         }
-        throw new CommonException(CommonExceptionCode.POST_NO_AUTH);
+        return true;
     }
 
     @Override

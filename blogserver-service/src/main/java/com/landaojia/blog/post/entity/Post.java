@@ -1,6 +1,9 @@
 package com.landaojia.blog.post.entity;
 
+import java.util.List;
+
 import com.landaojia.blog.common.dao.BaseEntity;
+import com.landaojia.blog.tag.entity.Tag;
 
 /**
  * 
@@ -19,6 +22,10 @@ public class Post extends BaseEntity {
     private Long viewCount;//
     
     private Boolean isPrivate;
+    
+    private String tags;
+    
+    private List<Tag> tagsView;
     
     /**
      * return
@@ -85,6 +92,22 @@ public class Post extends BaseEntity {
 
     public void setIsPrivate(Boolean isPrivate) {
         this.isPrivate = isPrivate;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public List<Tag> getTagsView() {
+        return tagsView;
+    }
+
+    public void setTagsView(List<Tag> tagsView) {
+        this.tagsView = tagsView;
     }
 
 }

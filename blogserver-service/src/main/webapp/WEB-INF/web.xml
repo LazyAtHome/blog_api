@@ -18,7 +18,12 @@
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:/META-INF/spring/blogserver*.xml</param-value>
+		<param-value>
+			classpath:/META-INF/spring/blogserver-dao.xml
+			classpath:/META-INF/spring/blogserver-redis.xml
+			classpath:/META-INF/spring/blogserver-context.xml
+			classpath:/META-INF/spring/blogserver-web.xml
+		</param-value>
 	</context-param>
 
 	<filter>

@@ -21,6 +21,7 @@ import com.landaojia.blog.common.util.DateUtil;
 import com.landaojia.blog.post.dao.PostDao;
 import com.landaojia.blog.post.entity.Post;
 import com.landaojia.blog.post.service.PostService;
+import com.landaojia.blog.tag.service.TagService;
 import com.landaojia.blog.user.entity.User;
 
 @Service
@@ -36,6 +37,9 @@ public class PostServiceImpl implements PostService {
 
     @Resource
     private RedisService redisService;
+    
+    @Resource
+    private TagService tagService;
 
     @Transactional
     @Override
@@ -46,6 +50,7 @@ public class PostServiceImpl implements PostService {
         post.setUpdatedBy(user.getEmail());
         post.setIsPrivate((null != post.getIsPrivate() && post.getIsPrivate()) ? true : false);
         this.commonDao.insert(post);
+        this.tagService.saveTags(post.getTags(), post.getId());
     }
 
     @Override

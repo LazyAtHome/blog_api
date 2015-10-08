@@ -34,13 +34,11 @@ public class UserController {
     @Resource
     UserService userService;
     
-    @Authorization(ignoreCheck = true)
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiOperation(value = "用户登录", httpMethod = "POST", notes = "用户登录", response = JsonResult.class)
-    
-    public JsonResult login(@ApiParam(required = true) String userName, @ApiParam(required = true) String password) {
-        User user = userService.login(userName, password);
+    public JsonResult login(@ApiParam(required = true) @RequestBody User u) {
+        User user = userService.login(u.getUserName(), u.getPassword());
         return JsonResult.success(user);
     }
 
@@ -53,7 +51,6 @@ public class UserController {
         return JsonResult.success("ok");
     }
     
-    @Authorization(ignoreCheck = true)
     @ResponseBody
     @RequestMapping(value = "/reg", method = RequestMethod.POST)
     @ApiOperation(value = "用户注册", httpMethod = "POST", notes = "用户注册", response = JsonResult.class)
