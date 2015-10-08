@@ -36,4 +36,9 @@ public class PostDaoImpl extends BaseDao implements PostDao {
         getSqlSession().update(NAME_SPACE + ".addViewCount", id);
     }
 
+    @Override
+    public List<Post> searchByTag(String q, PageBounds pageBounds) {
+        return getSqlSession().selectList(NAME_SPACE + ".queryByTag", q, pageBounds);
+    }
+
 }

@@ -42,10 +42,10 @@
 			AND b_post.id = #{cond.id}
 		</if>
 		<if test="cond.title != null">
-			AND b_post.title = #{cond.title}
+			AND b_post.title LIKE CONCAT('%',#{cond.title},'%')
 		</if>
 		<if test="cond.content != null">
-			AND b_post.content = #{cond.content}
+			AND b_post.content LIKE CONCAT('%',#{cond.content},'%')
 		</if>
 		<if test="cond.userId != null">
 			AND b_post.user_id = #{cond.userId}
@@ -203,4 +203,11 @@
 	<update id="addViewCount">
 		update b_post set view_count = view_count + 1 where b_post.id = #{id}
 	</update>
+	<select id="queryByTag" resultMap="result">
+		SELECT
+			CONCAT(LEFT(b_post.content,200),'...') as content,
+			<include refid="select_all_cols" />
+		FROM b_post LEFT JOIN b_post_tag ON b_post.id = b_post_tag.post_id
+		WHERE b_post.deleted_flag = 0 AND b_post_tag.tag_name = #{tagName}
+	</select>
 </mapper>

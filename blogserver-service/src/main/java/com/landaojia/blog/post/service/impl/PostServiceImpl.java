@@ -37,7 +37,7 @@ public class PostServiceImpl implements PostService {
 
     @Resource
     private RedisService redisService;
-    
+
     @Resource
     private TagService tagService;
 
@@ -105,6 +105,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public void delete(Long id) {
         this.commonDao.removeById(Post.class, id);
+        this.tagService.deleteByPostId(id);
     }
 
     @Transactional
@@ -119,6 +120,28 @@ public class PostServiceImpl implements PostService {
             this.redisService.sadd(key, ip);
             this.postDao.addViewCount(id);
         }
+    }
+
+    @Override
+    public Map<String, Object> search(Integer page, Integer limit, String by, String q) {
+        PageList<Post> pageList = null;
+        if (by.equals("tag")) {
+            pageList = (PageList<Post>) this.postDao.searchByTag(q,
+                    new PageBounds(page, limit, Order.formString("createdDate.desc")));
+        } else {
+            Post cond = new Post();
+            if (by.equals("title")) {
+                cond.setTitle(q);
+            } else {
+                cond.setContent(q);
+            }
+            pageList = (PageList<Post>) this.postDao.searchByPage(cond,
+                    new PageBounds(page, limit, Order.formString("createdDate.desc")));
+        }
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("posts", new ArrayList<Post>(pageList));
+        map.put("pageInfo", pageList.getPaginator());
+        return map;
     }
 
 }
