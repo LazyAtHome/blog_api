@@ -1,10 +1,8 @@
 package com.landaojia.blog.tag.dao.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.stereotype.Repository;
 
@@ -18,20 +16,33 @@ public class TagDaoImpl extends BaseDao implements TagDao {
     private static final String NAME_SPACE = Tag.class.getName();
 
     @Override
-    public List<Tag> searchTags(Set<Tag> tags) {
-        return getSqlSession().selectList(NAME_SPACE + ".searchTags", new ArrayList<>(tags));
+    public List<Tag> searchTags(List<Tag> tags) {
+        return getSqlSession().selectList(NAME_SPACE + ".searchTags", tags);
     }
 
     @Override
-    public void insertTags(Set<Tag> tags) {
-        getSqlSession().insert(NAME_SPACE + ".insertTags", new ArrayList<>(tags));
+    public void insertTags(List<Tag> tags) {
+        getSqlSession().insert(NAME_SPACE + ".insertTags", tags);
     }
 
     @Override
-    public void insertPostTagLink(Long postId, Set<Tag> tags) {
+    public void insertPostTagLink(List<Tag> tags, Long postId) {
         Map<String, Object> param = new HashMap<>();
         param.put("postId", postId);
-        param.put("tags", new ArrayList<>(tags));
+        param.put("tags", tags);
         getSqlSession().insert(NAME_SPACE + ".insertPostTagLink", param);
+    }
+
+    @Override
+    public void deletePostTagLink(List<Tag> tags, Long postId) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("postId", postId);
+        param.put("tags", tags);
+        getSqlSession().delete(NAME_SPACE + ".deletePostTagLink", param);
+    }
+
+    @Override
+    public List<Tag> searchPopularTags() {
+        return getSqlSession().selectList(NAME_SPACE + ".searchPopularTags");
     }
 }

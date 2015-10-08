@@ -18,34 +18,55 @@
 	</sql>
 
 	<select id="searchTags" resultMap="result">
-		select
+		SELECT
 		<include refid="select_cols" />
-		from b_tag where name in
+		FROM b_tag WHERE name IN
 		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
 			#{item.name}
 		</foreach>
 	</select>
+	
+	<select id="searchPopularTags" resultMap="result">
+		SELECT
+			COUNT(1) AS num,
+			tag_id AS id,
+			tag_name AS name
+		FROM
+			b_post_tag
+		GROUP BY
+			tag_id
+		ORDER BY
+			num DESC
+		LIMIT 5;
+	</select>
 
 	<insert id="insertTags">
-		insert into b_tag
+		INSERT INTO b_tag
 		(
 		<include refid="insert_cols_tag" />
 		)
-		values
+		VALUES
 		<foreach item="item" index="index" collection="list" open="" separator="," close="">
 			(#{item.name},1,0,now(),now(),'sys','sys')
 		</foreach>
 	</insert>
 	
 	<insert id="insertPostTagLink">
-		insert into b_post_tag
+		INSERT INTO b_post_tag
 		(
 		<include refid="insert_cols_post_tag" />
 		)
-		values
+		VALUES
 		<foreach item="item" index="index" collection="tags" open="" separator="," close="">
 			(#{postId},#{item.id},#{item.name},1,0,now(),now(),'sys','sys')
 		</foreach>
 	</insert>
-
+	
+	<delete id="deletePostTagLink">
+		DELETE FROM b_post_tag WHERE post_id = #{postId} AND tag_id IN
+		<foreach item="item" index="index" collection="tags" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+	
 </mapper>

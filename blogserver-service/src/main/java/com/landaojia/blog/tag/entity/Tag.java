@@ -7,6 +7,8 @@ public class Tag extends BaseEntity {
     
     private String name;
     
+    private Integer num;
+    
     public Tag() {
         super();
     }
@@ -23,7 +25,15 @@ public class Tag extends BaseEntity {
     public void setName(String name) {
         this.name = name;
     }
+    
+    public Integer getNum() {
+        return num;
+    }
 
+    public void setNum(Integer num) {
+        this.num = num;
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -45,11 +55,6 @@ public class Tag extends BaseEntity {
         } else if (!name.equals(other.name))
             return false;
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Tag [id=" + getId() + ", name=" + name + "]";
     }
 
 }

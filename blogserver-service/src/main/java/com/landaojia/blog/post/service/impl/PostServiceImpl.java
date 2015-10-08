@@ -50,7 +50,7 @@ public class PostServiceImpl implements PostService {
         post.setUpdatedBy(user.getEmail());
         post.setIsPrivate((null != post.getIsPrivate() && post.getIsPrivate()) ? true : false);
         this.commonDao.insert(post);
-        this.tagService.saveTags(post.getTags(), post.getId());
+        this.tagService.saveTags(post.getTagsList(), post.getId());
     }
 
     @Override
@@ -66,6 +66,7 @@ public class PostServiceImpl implements PostService {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("posts", new ArrayList<Post>(pageList));
         map.put("pageInfo", pageList.getPaginator());
+        map.put("popularTags", this.tagService.searchPopularTags());
         return map;
     }
 
@@ -97,6 +98,7 @@ public class PostServiceImpl implements PostService {
         oldPost.setIsPrivate((null != post.getIsPrivate() && post.getIsPrivate()) ? true : false);
         oldPost.setUpdatedBy(user.getEmail());
         this.commonDao.update(oldPost);
+        this.tagService.updateTags(oldPost.getTagsList(), post.getTagsList(), id);
     }
 
     @Transactional
