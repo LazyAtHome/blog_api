@@ -3,7 +3,7 @@
 <mapper namespace="com.landaojia.blog.post.entity.Post">
 	<resultMap type="com.landaojia.blog.post.entity.Post" id="result" >
 		<id column="id" property="id"/>
-		<collection property="tagsView" javaType="Arraylist" ofType="com.landaojia.blog.tag.entity.Tag" autoMapping="true" select="queryTagsByPostId" column="id">
+		<collection property="tagsList" javaType="Arraylist" ofType="com.landaojia.blog.tag.entity.Tag" autoMapping="true" select="queryTagsByPostId" column="id">
 		</collection>
 	</resultMap>
 	
@@ -14,7 +14,6 @@
 	<sql id="select_all_cols">
 		b_post.ID,
 		b_post.title as title,
-		b_post.content as content,
 		b_post.user_id as userId,
 		b_post.view_count as viewCount,
 		b_post.is_private as isPrivate,
@@ -88,7 +87,8 @@
 		</if>
 	</sql>
 	<select id="select" resultMap="result">
-		select
+		select 
+		b_post.content as content,
 		<include refid="select_all_cols" />
 		FROM b_post
 		WHERE DELETED_FLAG=0 AND
@@ -102,6 +102,7 @@
 	</select>
 	<select id="query" resultMap="result">
 		select
+		CONCAT(LEFT(b_post.content,200),'...') as content,
 		<include refid="select_all_cols" />
 		FROM b_post
 		<include refid="where_all" />
