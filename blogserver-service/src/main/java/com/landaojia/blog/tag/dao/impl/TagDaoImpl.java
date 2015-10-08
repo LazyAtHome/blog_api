@@ -45,4 +45,9 @@ public class TagDaoImpl extends BaseDao implements TagDao {
     public List<Tag> searchPopularTags() {
         return getSqlSession().selectList(NAME_SPACE + ".searchPopularTags");
     }
+
+    @Override
+    public void deleteByPostId(Long postId) {
+        getSqlSession().delete(NAME_SPACE + ".deleteByPostId", postId);
+    }
 }

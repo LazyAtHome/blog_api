@@ -16,4 +16,6 @@ public interface TagDao {
 
     public List<Tag> searchPopularTags();
 
+    public void deleteByPostId(Long postId);
+
 }

@@ -21,4 +21,6 @@ public interface PostService {
 
     public void addViewCount(String ip, Long id);
 
+    public Map<String, Object> search(Integer page, Integer limit, String by, String q);
+
 }

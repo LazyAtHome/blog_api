@@ -13,4 +13,6 @@ public interface PostDao {
 
     public void addViewCount(Long id);
 
+    public List<Post> searchByTag(String q, PageBounds pageBounds);
+
 }

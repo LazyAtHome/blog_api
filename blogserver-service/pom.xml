@@ -132,6 +132,11 @@
 			<version>${project.tomcat.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.github.rjeschke</groupId>
+		  	<artifactId>txtmark</artifactId>
+		  	<version>0.13</version>
+		</dependency>
 	</dependencies>
 
 

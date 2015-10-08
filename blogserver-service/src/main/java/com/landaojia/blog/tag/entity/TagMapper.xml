@@ -30,9 +30,11 @@
 		SELECT
 			COUNT(1) AS num,
 			tag_id AS id,
-			tag_name AS name
+			tag_name AS NAME
 		FROM
 			b_post_tag
+		WHERE
+			deleted_flag = 0
 		GROUP BY
 			tag_id
 		ORDER BY
@@ -67,6 +69,10 @@
 		<foreach item="item" index="index" collection="tags" open="(" separator="," close=")">
 			#{item.id}
 		</foreach>
+	</delete>
+	
+	<delete id="deleteByPostId">
+		UPDATE b_post_tag SET deleted_flag = 1 WHERE post_id = #{id}
 	</delete>
 	
 </mapper>

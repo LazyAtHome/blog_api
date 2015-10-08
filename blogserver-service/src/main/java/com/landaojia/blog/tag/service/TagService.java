@@ -12,4 +12,6 @@ public interface TagService {
 
     public List<Tag> searchPopularTags();
 
+    public void deleteByPostId(Long postId);
+
 }

@@ -51,4 +51,9 @@ public class TagServiceImpl implements TagService {
         return this.tagDao.searchPopularTags();
     }
 
+    @Override
+    public void deleteByPostId(Long postId) {
+        this.tagDao.deleteByPostId(postId);
+    }
+
 }
