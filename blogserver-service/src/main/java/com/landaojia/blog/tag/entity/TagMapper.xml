@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.landaojia.blog.tag.entity.Tag">
+
+	<resultMap type="com.landaojia.blog.tag.entity.Tag" id="result" />
+
+	<sql id="select_cols">
+		id,name
+	</sql>
+
+	<sql id="insert_cols_tag">
+		name,version,deleted_flag,created_date,updated_date,created_by,updated_by
+	</sql>
+	
+	<sql id="insert_cols_post_tag">
+		post_id,tag_id,tag_name,version,deleted_flag,created_date,updated_date,created_by,updated_by
+	</sql>
+
+	<select id="searchTags" resultMap="result">
+		select
+		<include refid="select_cols" />
+		from b_tag where name in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item.name}
+		</foreach>
+	</select>
+
+	<insert id="insertTags">
+		insert into b_tag
+		(
+		<include refid="insert_cols_tag" />
+		)
+		values
+		<foreach item="item" index="index" collection="list" open="" separator="," close="">
+			(#{item.name},1,0,now(),now(),'sys','sys')
+		</foreach>
+	</insert>
+	
+	<insert id="insertPostTagLink">
+		insert into b_post_tag
+		(
+		<include refid="insert_cols_post_tag" />
+		)
+		values
+		<foreach item="item" index="index" collection="tags" open="" separator="," close="">
+			(#{postId},#{item.id},#{item.name},1,0,now(),now(),'sys','sys')
+		</foreach>
+	</insert>
+
+</mapper>

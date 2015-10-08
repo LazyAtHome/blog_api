@@ -11,7 +11,5 @@ public @interface Authorization {
     
     //define the roles of users that can access to this method   
     UserRole[] role() default {};
-    
-    //whether we can ignore the role check.
-    boolean ignoreCheck() default false;
+
 }
