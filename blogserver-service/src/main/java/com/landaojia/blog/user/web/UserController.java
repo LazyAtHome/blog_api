@@ -3,6 +3,7 @@ package com.landaojia.blog.user.web;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +14,7 @@ import com.landaojia.blog.common.dao.CommonDao;
 import com.landaojia.blog.common.result.JsonResult;
 import com.landaojia.blog.common.validation.Validator;
 import com.landaojia.blog.role.Authorization;
+import com.landaojia.blog.role.UserRole;
 import com.landaojia.blog.user.entity.User;
 import com.landaojia.blog.user.service.UserService;
 import com.landaojia.mvc.Current;
@@ -23,7 +25,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 /**
  * Created by JUN on 15/9/11.
  */
-@Api(value = "users", description = "User API",basePath = "/users",position = 1)
+@Api(value = "users", description = "User API", basePath = "/users", position = 1)
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -33,12 +35,12 @@ public class UserController {
 
     @Resource
     UserService userService;
-    
+
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiOperation(value = "用户登录", httpMethod = "POST", notes = "用户登录", response = JsonResult.class)
-    public JsonResult login(@ApiParam(required = true) @RequestBody User u) {
-        User user = userService.login(u.getUserName(), u.getPassword());
+    public JsonResult login(@ApiParam(required = true) @RequestBody String userName, @RequestBody String password) {
+        User user = userService.login(userName, password);
         return JsonResult.success(user);
     }
 
@@ -47,10 +49,10 @@ public class UserController {
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     @ApiOperation(value = "用户注销", httpMethod = "GET", notes = "用户注销", response = JsonResult.class)
     public JsonResult logout(HttpSession session) {
-//        userService.logout(0L);
+        // userService.logout(0L);
         return JsonResult.success("ok");
     }
-    
+
     @ResponseBody
     @RequestMapping(value = "/reg", method = RequestMethod.POST)
     @ApiOperation(value = "用户注册", httpMethod = "POST", notes = "用户注册", response = JsonResult.class)
@@ -59,7 +61,7 @@ public class UserController {
         .forProperty("userName").notNull().notBlank().length(7, 20).hasNoChineseWord()
         .forProperty("email").notNull().maxLength(100).isEmail().hasNoChineseWord().custom(commonDao.search(new User().setEmail(user.getEmail())).size() == 0, "该邮箱地址已被注册")
         .forProperty("cryptedPassword").notNull().notBlank().length(7, 20).hasNoChineseWord().check();
-        userService.registerUser(user);
+        userService.register(user);
         return JsonResult.success("ok");
     }
 
@@ -71,5 +73,15 @@ public class UserController {
         User user = current.getCurrentUser();
         user.setCryptedPassword("");
         return JsonResult.success(user);
+    }
+
+    @Authorization(role = UserRole.ADMIN)
+    @ResponseBody
+    @RequestMapping(value = "/approve/{userId}", method = RequestMethod.GET)
+    @ApiOperation(value = "用户审核", httpMethod = "GET", notes = "管理员审核指定ID用户（将该用户角色修改为EDITOR）", response = JsonResult.class)
+    public JsonResult approve(Current current, @PathVariable Long userId) {
+        User cUser = current.getCurrentUser();
+        userService.approveUser(cUser.getId(),cUser.getUserName(), userId);
+        return JsonResult.success("ok");
     }
 }

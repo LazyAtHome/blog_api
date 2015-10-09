@@ -2,6 +2,7 @@ package com.landaojia.blog.post.service;
 
 import com.landaojia.blog.common.dao.Pagination;
 import com.landaojia.blog.post.entity.PostComment;
+import com.landaojia.blog.user.entity.User;
 
 /**
  * contains all of the operations about PostComment entity;
@@ -16,7 +17,7 @@ public interface PostCommentService {
      * @param postComment
      * @return
      */
-    PostComment save(PostComment postComment);
+    PostComment save(PostComment postComment, User currentUser);
 
     void delete(Long userId, Long commentId);
 
