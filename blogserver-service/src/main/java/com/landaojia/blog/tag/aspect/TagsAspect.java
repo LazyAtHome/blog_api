@@ -47,7 +47,7 @@ public class TagsAspect {
             if (!Strings.isNullOrEmpty(tag))
                 tags.add(new Tag(tag));
         }
-        post.setTagsList(new ArrayList<>(tags));
+        post.setTagList(new ArrayList<>(tags));
     }
 
 }

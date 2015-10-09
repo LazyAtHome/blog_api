@@ -56,8 +56,8 @@ public class PostController {
     @Authorization
     @ResponseBody
     @RequestMapping(value = "/my", method = RequestMethod.GET)
-    public JsonResult queryByUserId(@RequestParam(required = false, defaultValue = "1") Integer page, @RequestParam(required = false, defaultValue = "10") Integer limit, Current current) {
-        return JsonResult.success(this.postService.queryByUserId(page, limit, current.getCurrentUser()));
+    public JsonResult queryMyBlogs(@RequestParam(required = false, defaultValue = "1") Integer page, @RequestParam(required = false, defaultValue = "10") Integer limit, Current current) {
+        return JsonResult.success(this.postService.queryByUserId(page, limit, current.getCurrentUser().getId()));
     }
 
     @Authorization(role = { UserRole.EDITOR, UserRole.ADMIN })
