@@ -13,6 +13,7 @@ import com.landaojia.blog.common.exception.CommonExceptionCode;
 import com.landaojia.blog.common.util.DateUtil;
 import com.landaojia.blog.common.util.EncryptUtil;
 import com.landaojia.blog.common.util.Strings;
+import com.landaojia.blog.role.UserRole;
 import com.landaojia.blog.user.dao.UserDao;
 import com.landaojia.blog.user.entity.User;
 import com.landaojia.blog.user.service.UserService;
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService {
     private CommonDao commonDao;
     
     @Transactional
-    public void registerUser(User user) {
+    public void register(User user) {
         if(commonDao.search(new User(user.getUserName())).size() > 0){
             throw new CommonException(CommonExceptionCode.USER_IS_EXISTS);
         } else {
@@ -38,7 +39,7 @@ public class UserServiceImpl implements UserService {
             user.setCreatedBy("sys");
             user.setUpdatedBy("sys");
             user.setUpdatedDate(DateUtil.getCurrentDate());
-            user.setRole("admin");
+            user.setRole(UserRole.GUEST.getValue());
             user.setCryptedPassword(EncryptUtil.encrypt(user.getCryptedPassword()));
             commonDao.insert(user);
         }
@@ -66,6 +67,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public void logout(Long userId) {
         //TODO other businesses in service layer
+    }
+    
+    @Override
+    public void approveUser(Long operId, String operName, Long userId){
+        if(operId == null || userId == null || Strings.isNullOrEmpty(operName)) throw new CommonException(CommonExceptionCode.E999999);
+        User u = commonDao.findById(User.class, userId);
+        if(u == null) throw new CommonException(CommonExceptionCode.USER_NOT_EXISTS);
+        if(operId.compareTo(userId) == 0) throw new CommonException(CommonExceptionCode.ILLEGAL_OPERATION);
+        u.setRole(UserRole.EDITOR.getValue());
+        u.setUpdatedBy(operName);
+        u.setUpdatedDate(DateUtil.getCurrentDate());
+        commonDao.update(u);
     }
 
 }

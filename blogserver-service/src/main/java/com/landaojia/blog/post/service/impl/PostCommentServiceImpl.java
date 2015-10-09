@@ -14,6 +14,7 @@ import com.landaojia.blog.common.dao.CommonDao;
 import com.landaojia.blog.common.dao.Pagination;
 import com.landaojia.blog.common.exception.CommonException;
 import com.landaojia.blog.common.exception.CommonExceptionCode;
+import com.landaojia.blog.common.util.DateUtil;
 import com.landaojia.blog.post.entity.PostComment;
 import com.landaojia.blog.post.service.PostCommentService;
 import com.landaojia.blog.role.UserRole;
@@ -27,10 +28,25 @@ public class PostCommentServiceImpl implements PostCommentService {
 
     @Override
     @Transactional
-    public PostComment save(PostComment postComment) {
-        if (postComment == null) throw new CommonException(CommonExceptionCode.E999999);
-        if (postComment.getId() == null) return commonDao.insert(postComment);
-        else return commonDao.update(postComment);
+    public PostComment save(PostComment postComment, User currentUser) {
+        if(postComment.getId() == null){
+            postComment.setUserId(currentUser.getId());
+            postComment.setCreatedBy(currentUser.getUserName());
+            postComment.setCreatedDate(DateUtil.getCurrentDate());
+            postComment.setUpdatedBy(currentUser.getUserName());
+            postComment.setUpdatedDate(DateUtil.getCurrentDate());
+            postComment = commonDao.insert(postComment);
+        } else {
+            PostComment pc = commonDao.findById(PostComment.class, postComment.getId());
+            if(pc == null) throw new CommonException(CommonExceptionCode.POST_COMMENT_NOT_EXISTS);
+            if(pc.getUserId().equals(currentUser.getId()) || currentUser.getRole().equals(UserRole.ADMIN.getValue())){
+                pc.setContent(postComment.getContent());
+                pc.setUpdatedBy(currentUser.getUserName());
+                pc.setUpdatedDate(DateUtil.getCurrentDate());
+                postComment = commonDao.update(pc);
+            } else throw new CommonException(CommonExceptionCode.POST_COMMENT_NO_RIGHT_UPDATE);
+        }
+        return postComment;
     }
 
     @Override
@@ -39,10 +55,12 @@ public class PostCommentServiceImpl implements PostCommentService {
         if (userId == null || commentId == null) throw new CommonException(CommonExceptionCode.E999999);
         PostComment comment = commonDao.findById(PostComment.class, commentId);
         if (comment == null) throw new CommonException(CommonExceptionCode.POST_COMMENT_NOT_EXISTS);
+        //the user as the creator of PostComment who can freely delete it.
         if (comment.getUserId().compareTo(userId) == 0) {
             commonDao.removeById(PostComment.class, commentId);
             return;
         }
+        //if it's not creator, we rule that only the user having ADMIN role can delete it.
         User user = commonDao.findById(User.class, userId);
         if (user == null) throw new CommonException(CommonExceptionCode.USER_NOT_EXISTS);
         if (UserRole.ADMIN.equals(UserRole.getRole(user.getRole()))) {
