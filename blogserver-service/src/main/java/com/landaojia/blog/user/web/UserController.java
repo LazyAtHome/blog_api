@@ -39,7 +39,7 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiOperation(value = "用户登录", httpMethod = "POST", notes = "用户登录", response = JsonResult.class)
-    public JsonResult login(@ApiParam(required = true) @RequestBody String userName, @RequestBody String password) {
+    public JsonResult login(@ApiParam(required = true) String userName, String password) {
         User user = userService.login(userName, password);
         return JsonResult.success(user);
     }

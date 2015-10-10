@@ -26,7 +26,7 @@ public class MethodArgumentResolver implements HandlerMethodArgumentResolver {
 	public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
 		WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getServletContext());
-		return new Current(context.getBean(CommonDao.class), context.getBean(UserDao.class), (Long) request.getAttribute("userId"));
+		return new Current(context.getBean(CommonDao.class), context.getBean(UserDao.class), (Long) request.getAttribute("userId"), request.getServletContext().getRealPath("/"));
 	}
 
 	@Override

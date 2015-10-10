@@ -15,17 +15,20 @@ public class Current {
     
     public static final String SESSION_LOGIN = "session-login";
     
-    CommonDao commonDao;
+    private CommonDao commonDao;
     
-    UserDao userDao;
+    private UserDao userDao;
     
-    Long userId;
+    private Long userId;
+    
+    private String webRootPath;
 
-    public Current(CommonDao commonDao, UserDao userDao, Long userId) {
+    public Current(CommonDao commonDao, UserDao userDao, Long userId, String webRootPath) {
         super();
         this.commonDao = commonDao;
         this.userDao = userDao;
         this.userId = userId;
+        this.webRootPath = webRootPath;
     }
     
     public User getCurrentUser(){
@@ -37,5 +40,9 @@ public class Current {
        if(user != null)
           return UserRole.getRole(user.getRole());
        return null;  
+    }
+    
+    public String getWebRootPath(){
+    	return this.webRootPath;
     }
 }

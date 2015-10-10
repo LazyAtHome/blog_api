@@ -1,6 +1,8 @@
 package com.landaojia.blog.post.service.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,18 +10,22 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.github.miemiedev.mybatis.paginator.domain.Order;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.google.common.base.Strings;
+import com.landaojia.blog.common.dao.BaseEntity;
 import com.landaojia.blog.common.dao.CommonDao;
 import com.landaojia.blog.common.exception.CommonException;
 import com.landaojia.blog.common.exception.CommonExceptionCode;
 import com.landaojia.blog.common.redis.RedisService;
 import com.landaojia.blog.common.util.DateUtil;
+import com.landaojia.blog.common.util.FileHelper;
 import com.landaojia.blog.post.dao.PostDao;
 import com.landaojia.blog.post.entity.Post;
+import com.landaojia.blog.post.entity.PostAttachment;
 import com.landaojia.blog.post.service.PostService;
 import com.landaojia.blog.tag.service.TagService;
 import com.landaojia.blog.user.entity.User;
@@ -40,6 +46,9 @@ public class PostServiceImpl implements PostService {
 
     @Resource
     private TagService tagService;
+    
+    @Resource
+    private FileHelper fileHelper;
 
     @Transactional
     @Override
@@ -143,5 +152,37 @@ public class PostServiceImpl implements PostService {
         map.put("pageInfo", pageList.getPaginator());
         return map;
     }
+
+	@Override
+	@Transactional
+	public String addAttachment(MultipartFile file, Long postId, User currentUser, String webRootPath){
+		if(Strings.isNullOrEmpty(webRootPath)) throw new CommonException(CommonExceptionCode.E999999);
+		Post post = commonDao.findById(Post.class, postId);
+		if(post == null) throw new CommonException(CommonExceptionCode.POST_NOT_EXISTS);
+		if(post.getUserId().compareTo(currentUser.getId()) != 0) throw new CommonException(CommonExceptionCode.POST_ATTACHMENT_NO_RIGHT_UPLOAD);
+		String oldName = file.getOriginalFilename();
+		String postFix = oldName.split("\\.")[1];
+		Long time = DateUtil.getCurrentDate().getTime();
+		String newName = postId+""+time+"."+postFix;
+		try {
+			fileHelper.saveFile(file, newName, webRootPath);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new CommonException(CommonExceptionCode.POST_ATTACHMENT_UPLOAD_FAIL);
+		}
+		PostAttachment pa = new PostAttachment();
+		pa.setFileType(PostAttachment.getFileType(postFix));
+		pa.setFileSize(fileHelper.calculateFileSize(file.getSize()));
+		pa.setFileOriginalName(oldName);
+		pa.setFileName(newName);
+		pa.setPostId(post.getId());
+		pa.setDeletedFlag(BaseEntity.DELETED_FLAG_NO);
+		pa.setCreatedDate(new Date(time));
+		pa.setUpdatedDate(new Date(time));
+		pa.setCreatedBy(currentUser.getUserName());
+		pa.setUpdatedBy(currentUser.getUserName());
+		commonDao.insert(pa);
+		return fileHelper.getFileDir()+pa.getFileName();
+	}
 
 }

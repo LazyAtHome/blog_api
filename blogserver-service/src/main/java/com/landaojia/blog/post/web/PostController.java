@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.landaojia.blog.common.result.JsonResult;
 import com.landaojia.blog.common.util.HttpUtil;
@@ -78,6 +79,13 @@ public class PostController {
     public JsonResult delete(@PathVariable("id") Long id) {
         this.postService.delete(id);
         return JsonResult.success("ok");
+    }
+    
+    @Authorization(role = {UserRole.EDITOR, UserRole.ADMIN})
+    @ResponseBody
+    @RequestMapping(value="/upload/{postId}", method= RequestMethod.HEAD)
+    public JsonResult addAttachment(MultipartFile file,@PathVariable Long postId, Current current){
+    	return JsonResult.success(postService.addAttachment(file, postId, current.getCurrentUser(), current.getWebRootPath()));
     }
 
 }

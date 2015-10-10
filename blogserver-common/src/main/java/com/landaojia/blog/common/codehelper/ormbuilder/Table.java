@@ -40,7 +40,13 @@ public class Table implements Writeable {
 
 	public void write( String out) {
 		String path = out.endsWith(File.separator) ? out : out + File.separator;
-		path = path + pkg.replaceAll("\\.", File.separator);
+		String[] pkgs = pkg.split("\\.");
+		StringBuilder sb = new StringBuilder(pkgs[0]);
+		sb.append(File.separator);
+		for(int i = 1; i < pkgs.length; i++){
+			sb.append(pkgs[i]).append(File.separator);
+		}
+		path = path + sb.toString();
 		path = path.endsWith(File.separator) ? path : path + File.separator;
 
 		File f = new File(path);

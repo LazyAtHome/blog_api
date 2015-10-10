@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landaojia.blog.post.entity.PostAttachmentDao">
+    <resultMap type="com.landaojia.blog.post.entity.PostAttachment" id="result"/>
+    <sql id="select_all_cols">
+                b_post_attachment.ID,
+                b_post_attachment.post_id as postId,
+                b_post_attachment.file_name as fileName,
+                b_post_attachment.file_original_name as fileOriginalName,
+                b_post_attachment.file_type as fileType,
+                b_post_attachment.file_size as fileSize,
+                b_post_attachment.CREATED_DATE as createdDate,
+        b_post_attachment.UPDATED_DATE as updatedDate,
+        b_post_attachment.CREATED_BY as createdBy,
+        b_post_attachment.UPDATED_BY as updatedBy,
+        b_post_attachment.VERSION
+    </sql>
+    <sql id="insert_all_cols">
+                b_post_attachment.post_id,
+                b_post_attachment.file_name,
+                b_post_attachment.file_original_name,
+                b_post_attachment.file_type,
+                b_post_attachment.file_size,
+                b_post_attachment.DELETED_FLAG,
+        b_post_attachment.CREATED_DATE,
+        b_post_attachment.UPDATED_DATE,
+        b_post_attachment.CREATED_BY,
+        b_post_attachment.UPDATED_BY,
+        b_post_attachment.VERSION
+    </sql>
+    <sql id="where_all">
+        WHERE DELETED_FLAG=0
+        <if test="cond.id != null">
+            AND b_post_attachment.id = #{cond.id}
+        </if>
+                <if test="cond.postId != null">
+            AND b_post_attachment.post_id = #{cond.postId}
+        </if>
+                        <if test="cond.fileName != null">
+            AND b_post_attachment.file_name = #{cond.fileName}
+        </if>
+                        <if test="cond.fileOriginalName != null">
+            AND b_post_attachment.file_original_name = #{cond.fileOriginalName}
+        </if>
+                        <if test="cond.fileType != null">
+            AND b_post_attachment.file_type = #{cond.fileType}
+        </if>
+                        <if test="cond.fileSize != null">
+            AND b_post_attachment.file_size = #{cond.fileSize}
+        </if>
+                        <if test="cond.version != null">
+            AND b_post_attachment.version = #{cond.version}
+        </if>
+        <if test="cond.ids != null">
+            and b_post_attachment.id in
+            <foreach item="item" index="index" collection="cond.ids" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="cond.createdDateB != null">
+            <![CDATA[
+			AND b_post_attachment.CREATED_DATE >= #{cond.createdDateB}
+		]]>
+        </if>
+        <if test="cond.createdDateE != null">
+            <![CDATA[
+			AND b_post_attachment.CREATED_DATE <= #{cond.createdDateE}
+		]]>
+        </if>
+        <if test="cond.updatedDateB != null">
+            <![CDATA[
+			AND b_post_attachment.UPDATED_DATE >= #{cond.updatedDateB}
+		]]>
+        </if>
+        <if test="cond.updatedDateE != null">
+            <![CDATA[
+			AND b_post_attachment.UPDATED_DATE <= #{cond.updatedDateE}
+		]]>
+        </if>
+    </sql>
+    <select id="select" resultMap="result">
+        select <include refid="select_all_cols"/>
+        FROM b_post_attachment
+        WHERE DELETED_FLAG=0 and b_post_attachment.ID=#{id}
+        <if test="lock">
+            FOR UPDATE
+        </if>
+    </select>
+    <select id="query" resultMap="result">
+        select <include refid="select_all_cols"/>
+        FROM b_post_attachment
+        <include refid="where_all"/>
+        <if test="start != null">
+            order by b_post_attachment.CREATED_DATE desc
+            limit #{start},#{size}
+        </if>
+    </select>
+    <select id="count" resultType="java.lang.Long">
+        select count(0)
+        FROM b_post_attachment
+        <include refid="where_all"/>
+    </select>
+    <select id="sum" resultType="java.math.BigDecimal">
+        select sum(${col})
+        FROM b_post_attachment
+        <include refid="where_all"/>
+    </select>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" >
+        INSERT INTO b_post_attachment(<include refid="insert_all_cols"/>)
+        VALUES
+        (
+                #{postId},
+                #{fileName},
+                #{fileOriginalName},
+                #{fileType},
+                #{fileSize},
+                0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
+        )
+    </insert>
+    <insert id="batchInsert">
+        INSERT INTO b_post_attachment(<include refid="insert_all_cols"/>)
+        VALUES
+        <foreach item="item" index="index" collection="list" open="" separator="," close="">
+            (
+                        #{item.postId},
+                        #{item.fileName},
+                        #{item.fileOriginalName},
+                        #{item.fileType},
+                        #{item.fileSize},
+                        0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
+            )
+        </foreach>
+    </insert>
+    <insert id="insertWithId">
+        INSERT INTO b_post_attachment(ID,<include refid="insert_all_cols"/>)
+        VALUES
+        (#{id},
+                #{postId},
+                #{fileName},
+                #{fileOriginalName},
+                #{fileType},
+                #{fileSize},
+                0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
+        )
+    </insert>
+    <insert id="batchInsertWithId">
+        INSERT INTO b_post_attachment(ID,<include refid="insert_all_cols"/>)
+        VALUES
+        <foreach item="item" index="index" collection="list" open="" separator="," close="">
+            (#{item.id},
+                        #{item.postId},
+                        #{item.fileName},
+                        #{item.fileOriginalName},
+                        #{item.fileType},
+                        #{item.fileSize},
+                        0,current_timestamp(),current_timestamp(),#{createdBy},#{updatedBy},1
+            )
+        </foreach>
+    </insert>
+    <update id="update">
+        update b_post_attachment
+        <set>
+                        post_id = #{postId},
+                        file_name = #{fileName},
+                        file_original_name = #{fileOriginalName},
+                        file_type = #{fileType},
+                        file_size = #{fileSize},
+                        id = #{id},
+            version = version + 1,
+            UPDATED_DATE = current_timestamp(),
+            UPDATED_BY=#{updatedBy}
+        </set>
+        where b_post_attachment.id = #{id} and b_post_attachment.version = #{version}
+    </update>
+    <delete id="delete">
+        update b_post_attachment set DELETED_FLAG=1
+        <include refid="where_all"/>
+    </delete>
+    <delete id="deleteById">
+        update b_post_attachment set DELETED_FLAG=1 where b_post_attachment.id = #{id}
+    </delete>
+</mapper>

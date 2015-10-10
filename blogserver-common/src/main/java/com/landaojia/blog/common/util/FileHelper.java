@@ -1,5 +1,6 @@
 package com.landaojia.blog.common.util;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,41 +15,50 @@ import com.landaojia.blog.common.exception.CommonExceptionCode;
  */
 public class FileHelper {
 
-    private String fileDir;
+	private String fileDir;
 
-    private Long limitSize;
+	private Long limitSize;
 
-    public void SaveFile(MultipartFile file, String path, String filename) throws IOException {
-        if (file == null) throw new CommonException(CommonExceptionCode.POST_ATTACHMENT_UPLOAD_FAIL);
-        if (file.getSize() > limitSize) throw new CommonException(CommonExceptionCode.POST_ATTACHMENT_OUT_OF_SIZE);
-        InputStream stream = file.getInputStream();
-        FileOutputStream fs = new FileOutputStream(fileDir + filename);
-        byte[] buffer = new byte[1024 * 1024];
-        int bytesum = 0;
-        int byteread = 0;
-        while ((byteread = stream.read(buffer)) != -1) {
-            bytesum += byteread;
-            fs.write(buffer, bytesum, byteread);
-            fs.flush();
-        }
-        fs.close();
-        stream.close();
-    }
+	public void saveFile(MultipartFile file, String filename, String webRootPath) throws IOException {
+		if (file == null)
+			throw new CommonException(CommonExceptionCode.POST_ATTACHMENT_UPLOAD_FAIL);
+		if (file.getSize() > limitSize)
+			throw new CommonException(CommonExceptionCode.POST_ATTACHMENT_OUT_OF_SIZE);
+		InputStream stream = file.getInputStream();
+		File dir = new File(webRootPath + fileDir);
+		if (!dir.exists())
+			dir.mkdirs();
+		FileOutputStream fs = new FileOutputStream(dir.getPath() + filename);
+		byte[] buffer = new byte[1024 * 1024];
+		int bytesum = 0;
+		int byteread = 0;
+		while ((byteread = stream.read(buffer)) != -1) {
+			bytesum += byteread;
+			fs.write(buffer, bytesum, byteread);
+			fs.flush();
+		}
+		fs.close();
+		stream.close();
+	}
 
-    public String getFileDir() {
-        return fileDir;
-    }
+	public Float calculateFileSize(Long fileSize) {
+		return new Float((Double) (Math.round(fileSize * 10000) / 1024 / 1024 / 10000.0));
+	}
 
-    public void setFileDir(String fileDir) {
-        this.fileDir = fileDir;
-    }
+	public String getFileDir() {
+		return fileDir;
+	}
 
-    public Long getLimitSize() {
-        return limitSize;
-    }
+	public void setFileDir(String fileDir) {
+		this.fileDir = fileDir;
+	}
 
-    public void setLimitSize(Long limitSize) {
-        this.limitSize = limitSize;
-    }
+	public Long getLimitSize() {
+		return limitSize;
+	}
+
+	public void setLimitSize(Long limitSize) {
+		this.limitSize = limitSize;
+	}
 
 }
