@@ -10,13 +10,13 @@ import com.landaojia.blog.common.dao.BaseEntity;
 public class PostAttachment extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 
+	public static final Integer FILE_TYPE_OTHER = 0;
 	public static final Integer FILE_TYPE_IMG = 1;
 	public static final String FILE_TYPE_IMG_DETAIL = "img bmp jpg jpeg";
 	public static final Integer FILE_TYPE_OFFICE = 2;
 	public static final String FILE_TYPE_OFFICE_DETAIL = "xls mdb xls doc ppt docx xlsx pptx";
 	public static final Integer FILE_TYPE_VIDEO = 3;
 	public static final String FILE_TYPE_VIDEO_DETAIL = "mkv avi vob mp4 mpeg4 wmv flv";
-	public static final Integer FILE_TYPE_OTHER = 4;
 
 	public static Integer getFileType(String postFix) {
 		if (FILE_TYPE_IMG_DETAIL.contains(postFix)) {
@@ -37,7 +37,7 @@ public class PostAttachment extends BaseEntity {
 
 	private Integer fileType;//
 
-	private Float fileSize;//
+	private Long fileSize;//
 
 	/**
 	 * return
@@ -99,18 +99,13 @@ public class PostAttachment extends BaseEntity {
 		this.fileType = fileType;
 	}
 
-	/**
-	 * return
-	 */
-	public Float getFileSize() {
+	public Long getFileSize() {
 		return fileSize;
 	}
 
-	/**
-	 * @param fileSize
-	 * 
-	 */
-	public void setFileSize(Float fileSize) {
+	public void setFileSize(Long fileSize) {
 		this.fileSize = fileSize;
 	}
+
+
 }

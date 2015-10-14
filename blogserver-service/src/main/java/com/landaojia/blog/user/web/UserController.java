@@ -17,13 +17,17 @@ import com.landaojia.blog.role.Authorization;
 import com.landaojia.blog.role.UserRole;
 import com.landaojia.blog.user.entity.User;
 import com.landaojia.blog.user.service.UserService;
+import com.landaojia.blog.user.web.dto.LoginDTO;
 import com.landaojia.mvc.Current;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
 /**
- * Created by JUN on 15/9/11.
+ * 
+ * @author Jason
+ *
+ * 2015年09月12日
  */
 @Api(value = "users", description = "User API", basePath = "/users", position = 1)
 @RestController
@@ -37,16 +41,16 @@ public class UserController {
     UserService userService;
 
     @ResponseBody
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = "login", method = RequestMethod.POST)
     @ApiOperation(value = "用户登录", httpMethod = "POST", notes = "用户登录", response = JsonResult.class)
-    public JsonResult login(@ApiParam(required = true) String userName, String password) {
-        User user = userService.login(userName, password);
+    public JsonResult login(@ApiParam(required = true) @RequestBody LoginDTO dto) {
+        User user = userService.login(dto.getUserName(), dto.getPassword());
         return JsonResult.success(user);
     }
 
     @Authorization
     @ResponseBody
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    @RequestMapping(value = "logout", method = RequestMethod.GET)
     @ApiOperation(value = "用户注销", httpMethod = "GET", notes = "用户注销", response = JsonResult.class)
     public JsonResult logout(HttpSession session) {
         // userService.logout(0L);
@@ -54,7 +58,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/reg", method = RequestMethod.POST)
+    @RequestMapping(value = "reg", method = RequestMethod.POST)
     @ApiOperation(value = "用户注册", httpMethod = "POST", notes = "用户注册", response = JsonResult.class)
     public JsonResult register(@ApiParam(required = true) @RequestBody User user) {
         new Validator(user)
@@ -67,7 +71,7 @@ public class UserController {
 
     @Authorization
     @ResponseBody
-    @RequestMapping(value = "/current", method = RequestMethod.GET)
+    @RequestMapping(value = "current", method = RequestMethod.GET)
     @ApiOperation(value = "获取当前用户信息", httpMethod = "GET", notes = "获取当前用户信息", response = JsonResult.class)
     public JsonResult current(@ApiParam(required = true) Current current) {
         User user = current.getCurrentUser();
@@ -77,7 +81,7 @@ public class UserController {
 
     @Authorization(role = UserRole.ADMIN)
     @ResponseBody
-    @RequestMapping(value = "/approve/{userId}", method = RequestMethod.GET)
+    @RequestMapping(value = "approve/{userId}", method = RequestMethod.GET)
     @ApiOperation(value = "用户审核", httpMethod = "GET", notes = "管理员审核指定ID用户（将该用户角色修改为EDITOR）", response = JsonResult.class)
     public JsonResult approve(Current current, @PathVariable Long userId) {
         User cUser = current.getCurrentUser();

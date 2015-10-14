@@ -31,8 +31,7 @@ public class CodeGeneratorTest {
 
     @Test
     public void test() throws Exception {
-        new CodeGenerator(ds, "blog_db", "com.landaojia.blog.post.entity").generateCode(false, "../blogserver-service/src/main/java/", "b_", "b_post");
-        new CodeGenerator(ds, "blog_db", "com.landaojia.blog.user.entity").generateCode(false, "../blogserver-service/src/main/java/", "b_", "b_user");
+        new CodeGenerator(ds, "blog_db", "com.landaojia.blog.post.entity").generateCode(false, "E:/Git_Local/blog_api/blogserver-service/src/main/java/", "b_", "b_post_attachment");
     }
 
 

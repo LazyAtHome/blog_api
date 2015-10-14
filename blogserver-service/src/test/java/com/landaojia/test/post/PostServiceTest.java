@@ -1,9 +1,16 @@
 package com.landaojia.test.post;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import javax.annotation.Resource;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.landaojia.blog.common.dao.CommonDao;
 import com.landaojia.blog.post.entity.Post;
@@ -55,6 +62,13 @@ public class PostServiceTest extends AbstractJunitContextTests {
     @Test
     public void testDelete() {
         this.postService.delete(1L);
+    }
+    
+    @Test
+    public void testHHH() throws FileNotFoundException, IOException {
+    	User user = commonDao.findById(User.class, 41L);
+    	MockMultipartFile file = new MockMultipartFile("xxx.docx", new FileInputStream(new File("d:/懒到家用户APP功能需求文档3.0.docx")));
+    	this.postService.addAttachment(file, 154L, user, "D:/files/");
     }
 
 }

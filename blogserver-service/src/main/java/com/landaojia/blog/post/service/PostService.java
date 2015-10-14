@@ -9,7 +9,7 @@ import com.landaojia.blog.user.entity.User;
 
 public interface PostService {
 
-    public void create(Post post, User user);
+    public Long create(Post post, User user);
 
     public Post queryById(Long id, User user);
 

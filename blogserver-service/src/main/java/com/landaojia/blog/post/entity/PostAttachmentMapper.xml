@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.landaojia.blog.post.entity.PostAttachmentDao">
+<mapper namespace="com.landaojia.blog.post.entity.PostAttachment">
     <resultMap type="com.landaojia.blog.post.entity.PostAttachment" id="result"/>
     <sql id="select_all_cols">
                 b_post_attachment.ID,

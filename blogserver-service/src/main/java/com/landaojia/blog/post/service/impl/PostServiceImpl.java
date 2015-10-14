@@ -52,14 +52,15 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public void create(Post post, User user) {
+    public Long create(Post post, User user) {
         post.setUserId(user.getId());
         post.setViewCount(0L);
         post.setCreatedBy(user.getEmail());
         post.setUpdatedBy(user.getEmail());
         post.setIsPrivate((null != post.getIsPrivate() && post.getIsPrivate()) ? true : false);
-        this.commonDao.insert(post);
+        Long id = this.commonDao.insert(post).getId();
         this.tagService.saveTags(post.getTagsList(), post.getId());
+        return id;
     }
 
     @Override
@@ -172,7 +173,7 @@ public class PostServiceImpl implements PostService {
 		}
 		PostAttachment pa = new PostAttachment();
 		pa.setFileType(PostAttachment.getFileType(postFix));
-		pa.setFileSize(fileHelper.calculateFileSize(file.getSize()));
+		pa.setFileSize(file.getSize());
 		pa.setFileOriginalName(oldName);
 		pa.setFileName(newName);
 		pa.setPostId(post.getId());

@@ -36,8 +36,7 @@ public class PostController {
         v.forProperty("title").notNull().notBlank().maxLength(50);
         v.forProperty("content").notNull().notBlank().maxLength(4000);
         v.check();
-        this.postService.create(post, current.getCurrentUser());
-        return JsonResult.success("ok");
+        return JsonResult.success(postService.create(post, current.getCurrentUser()));
     }
 
     @ResponseBody
@@ -83,7 +82,7 @@ public class PostController {
     
     @Authorization(role = {UserRole.EDITOR, UserRole.ADMIN})
     @ResponseBody
-    @RequestMapping(value="/upload/{postId}", method= RequestMethod.HEAD)
+    @RequestMapping(value="uploadFile/{postId}", method= RequestMethod.POST)
     public JsonResult addAttachment(MultipartFile file,@PathVariable Long postId, Current current){
     	return JsonResult.success(postService.addAttachment(file, postId, current.getCurrentUser(), current.getWebRootPath()));
     }
