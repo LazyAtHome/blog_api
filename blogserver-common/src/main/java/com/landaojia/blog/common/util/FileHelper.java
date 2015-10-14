@@ -1,8 +1,10 @@
 package com.landaojia.blog.common.util;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,41 +16,57 @@ import com.landaojia.blog.common.exception.CommonExceptionCode;
  */
 public class FileHelper {
 
-    private String fileDir;
+	private String fileDir;
 
-    private Long limitSize;
+	private Long limitSize;
 
-    public void SaveFile(MultipartFile file, String path, String filename) throws IOException {
-        if (file == null) throw new CommonException(CommonExceptionCode.POST_ATTACHMENT_UPLOAD_FAIL);
-        if (file.getSize() > limitSize) throw new CommonException(CommonExceptionCode.POST_ATTACHMENT_OUT_OF_SIZE);
-        InputStream stream = file.getInputStream();
-        FileOutputStream fs = new FileOutputStream(fileDir + filename);
-        byte[] buffer = new byte[1024 * 1024];
-        int bytesum = 0;
-        int byteread = 0;
-        while ((byteread = stream.read(buffer)) != -1) {
-            bytesum += byteread;
-            fs.write(buffer, bytesum, byteread);
-            fs.flush();
-        }
-        fs.close();
-        stream.close();
-    }
+	public void saveFile(MultipartFile file, String filename, String webRootPath) throws IOException {
+		if (file == null)
+			throw new CommonException(CommonExceptionCode.POST_ATTACHMENT_UPLOAD_FAIL);
+		if (file.getSize() > limitSize)
+			throw new CommonException(CommonExceptionCode.POST_ATTACHMENT_OUT_OF_SIZE);
+		InputStream stream = file.getInputStream();
+		File dir = new File(webRootPath + fileDir);
+		if (!dir.exists())
+			dir.mkdirs();
+		String realPath = dir.getPath() + File.separator + filename;
+		File realFile = new File(realPath);
+		if (!realFile.exists())
+			realFile.createNewFile();
+		FileOutputStream fos = new FileOutputStream(realFile);
+		byte[] b = new byte[1024];
+		while ((stream.read(b)) != -1) {
+			fos.write(b);
+		}
+		stream.close();
+		fos.close();
+	}
 
-    public String getFileDir() {
-        return fileDir;
-    }
+	public static String calculateFileSize(long bytes) {
+		BigDecimal filesize = new BigDecimal(bytes);
+		BigDecimal megabyte = new BigDecimal(1024 * 1024);
+		float returnValue = filesize.divide(megabyte, 2, BigDecimal.ROUND_UP).floatValue();
+		if (returnValue > 1)
+			return (returnValue + "MB");
+		BigDecimal kilobyte = new BigDecimal(1024);
+		returnValue = filesize.divide(kilobyte, 2, BigDecimal.ROUND_UP).floatValue();
+		return (returnValue + "KB");
+	}
 
-    public void setFileDir(String fileDir) {
-        this.fileDir = fileDir;
-    }
+	public String getFileDir() {
+		return fileDir;
+	}
 
-    public Long getLimitSize() {
-        return limitSize;
-    }
+	public void setFileDir(String fileDir) {
+		this.fileDir = fileDir;
+	}
 
-    public void setLimitSize(Long limitSize) {
-        this.limitSize = limitSize;
-    }
+	public Long getLimitSize() {
+		return limitSize;
+	}
+
+	public void setLimitSize(Long limitSize) {
+		this.limitSize = limitSize;
+	}
 
 }

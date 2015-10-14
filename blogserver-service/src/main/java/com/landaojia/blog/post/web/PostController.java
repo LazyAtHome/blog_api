@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.landaojia.blog.common.result.JsonResult;
 import com.landaojia.blog.common.util.HttpUtil;
@@ -35,8 +36,7 @@ public class PostController {
         v.forProperty("title").notNull().notBlank().maxLength(50);
         v.forProperty("content").notNull().notBlank().maxLength(4000);
         v.check();
-        this.postService.create(post, current.getCurrentUser());
-        return JsonResult.success("ok");
+        return JsonResult.success(postService.create(post, current.getCurrentUser()));
     }
 
     @ResponseBody
@@ -56,7 +56,7 @@ public class PostController {
     @Authorization
     @ResponseBody
     @RequestMapping(value = "/my", method = RequestMethod.GET)
-    public JsonResult queryMyBlogs(@RequestParam(required = false, defaultValue = "1") Integer page, @RequestParam(required = false, defaultValue = "10") Integer limit, Current current) {
+    public JsonResult queryByUserId(@RequestParam(required = false, defaultValue = "1") Integer page, @RequestParam(required = false, defaultValue = "10") Integer limit, Current current) {
         return JsonResult.success(this.postService.queryByUserId(page, limit, current.getCurrentUser().getId()));
     }
 
@@ -78,6 +78,13 @@ public class PostController {
     public JsonResult delete(@PathVariable("id") Long id) {
         this.postService.delete(id);
         return JsonResult.success("ok");
+    }
+    
+    @Authorization(role = {UserRole.EDITOR, UserRole.ADMIN})
+    @ResponseBody
+    @RequestMapping(value="uploadFile/{postId}", method= RequestMethod.POST)
+    public JsonResult addAttachment(MultipartFile file,@PathVariable Long postId, Current current){
+    	return JsonResult.success(postService.addAttachment(file, postId, current.getCurrentUser(), current.getWebRootPath()));
     }
 
 }

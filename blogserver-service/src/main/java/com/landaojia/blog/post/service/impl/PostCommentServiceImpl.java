@@ -20,6 +20,12 @@ import com.landaojia.blog.post.service.PostCommentService;
 import com.landaojia.blog.role.UserRole;
 import com.landaojia.blog.user.entity.User;
 
+/**
+ * 
+ * @author Jason
+ *
+ * 2015年10月12日
+ */
 @Service
 public class PostCommentServiceImpl implements PostCommentService {
 

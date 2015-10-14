@@ -32,7 +32,11 @@
             </map>
         </property>
     </bean>
-    
+    <bean id="fileHelper" class="com.landaojia.blog.common.util.FileHelper">
+    	<property name="fileDir" value="/attachments/"/>
+    	<!-- byte is the unit of it-->
+    	<property name="limitSize" value="10000000"/>
+    </bean>
     <!-- aop auto proxy -->
     <aop:aspectj-autoproxy />
 </beans>
