@@ -15,7 +15,7 @@ public interface PostService {
 
     public Map<String, Object> queryAll(Integer page, Integer limit);
 
-    public Map<String, Object> queryByUserId(Integer page, Integer limit, User user);
+    public Map<String, Object> queryByUserId(Integer page, Integer limit, Long userId);
 
     public void update(Long id, Post post, User user);
 

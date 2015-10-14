@@ -59,7 +59,7 @@ public class PostServiceImpl implements PostService {
         post.setUpdatedBy(user.getEmail());
         post.setIsPrivate((null != post.getIsPrivate() && post.getIsPrivate()) ? true : false);
         Long id = this.commonDao.insert(post).getId();
-        this.tagService.saveTags(post.getTagsList(), post.getId());
+        this.tagService.saveTags(post.getTagList(), post.getId());
         return id;
     }
 
@@ -81,9 +81,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Map<String, Object> queryByUserId(Integer page, Integer limit, User user) {
+    public Map<String, Object> queryByUserId(Integer page, Integer limit, Long userId) {
         Post cond = new Post();
-        cond.setUserId(user.getId());
+        cond.setUserId(userId);
         PageList<Post> pageList = (PageList<Post>) this.postDao.searchByPage(cond, new PageBounds(page,
                 limit, Order.formString("createdDate.desc")));
         Map<String, Object> map = new HashMap<String, Object>();
@@ -108,7 +108,7 @@ public class PostServiceImpl implements PostService {
         oldPost.setIsPrivate((null != post.getIsPrivate() && post.getIsPrivate()) ? true : false);
         oldPost.setUpdatedBy(user.getEmail());
         this.commonDao.update(oldPost);
-        this.tagService.updateTags(oldPost.getTagsList(), post.getTagsList(), id);
+        this.tagService.updateTags(oldPost.getTagList(), post.getTagList(), id);
     }
 
     @Transactional

@@ -3,7 +3,7 @@
 <mapper namespace="com.landaojia.blog.post.entity.Post">
 	<resultMap type="com.landaojia.blog.post.entity.Post" id="result" >
 		<id column="id" property="id"/>
-		<collection property="tagsList" javaType="Arraylist" ofType="com.landaojia.blog.tag.entity.Tag" autoMapping="true" select="queryTagsByPostId" column="id">
+		<collection property="tagList" javaType="Arraylist" ofType="com.landaojia.blog.tag.entity.Tag" autoMapping="true" select="queryTagsByPostId" column="id">
 		</collection>
 	</resultMap>
 	

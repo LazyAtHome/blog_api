@@ -25,7 +25,7 @@ public class Post extends BaseEntity {
     
     private String tags;
     
-    private List<Tag> tagsList;
+    private List<Tag> tagList;
     
     /**
      * return
@@ -102,12 +102,12 @@ public class Post extends BaseEntity {
         this.tags = tags;
     }
 
-    public List<Tag> getTagsList() {
-        return tagsList;
+    public List<Tag> getTagList() {
+        return tagList;
     }
 
-    public void setTagsList(List<Tag> tagsList) {
-        this.tagsList = tagsList;
+    public void setTagList(List<Tag> tagList) {
+        this.tagList = tagList;
     }
 
 }
